@@ -1,0 +1,316 @@
+package com.example.mygroceries.database;
+
+import java.util.ArrayList;
+
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+public abstract class DBManager<T> extends SQLiteOpenHelper {
+	// Database Name
+	private static final String DATABASE_NAME = "MyGroceriesDB";
+
+	// Database Version
+	private static final int DATABASE_VERSION = 1;
+
+	// Tables
+	protected static final String TABLE_ITEM = "item";
+	protected static final String TABLE_BRAND = "brand";
+	protected static final String TABLE_CATEGORY = "category";
+	protected static final String TABLE_STORAGE_AREA = "storage_area";
+	protected static final String TABLE_SHOPPING_LIST = "shopping_list";
+	protected static final String TABLE_BUYED_LIST = "buyedList";
+
+	// Id
+	protected static final String ID = "id";
+
+	// Item column names
+	protected static final String ITEM_NAME = "name";
+	protected static final String ITEM_TYPE = "type";
+	protected static final String ITEM_ESSENTIAL = "essential";
+	protected static final String ITEM_MINIMUM = "minimum";
+	protected static final String ITEM_QUANTITY = "quantity";
+	protected static final String ITEM_CATEGORY_ID = "fk_category_id";
+	protected static final String ITEM_STORAGE_AREA_ID = "fk_storage_area_id";
+
+	// Brand column names
+	protected static final String BRAND_NAME = "name";
+	protected static final String BRAND_DESCRIPTION = "description";
+	protected static final String BRAND_BARCODE = "bar_code";
+	protected static final String BRAND_PRICE = "price";
+	protected static final String BRAND_QUANTITY = "quantity";
+	protected static final String BRAND_NEED = "need";
+	protected static final String BRAND_FAVOURITE = "favourite";
+	protected static final String BRAND_ITEM_ID = "fk_item_id";
+
+	// Category column names
+	protected static final String CATEGORY_NAME = "name";
+
+	// Storage Area column names
+	protected static final String STORAGE_AREA_NAME = "name";
+
+	// List column names
+	protected static final String SHOPPING_LIST_BRAND_ID = "fk_brand_id";
+	protected static final String SHOPPING_LIST_ITEM_ID = "fk_item_id";
+	
+	// List Buyed column name
+	protected static final String BUYED_LIST_BRAND_ID = "fk_brand_id";
+	protected static final String BUYED_LIST_ITEM_ID = "fk_item_id";
+
+	// Index Item
+	private static final String INDEX_ITEM_PK = "ITEM_PK_I";	
+	private static final String INDEX_ITEM_CATEGORY_FK = "ITEM_CATEGORY_FK_I";
+	private static final String INDEX_ITEM_STORAGE_AREA_FK = "ITEM_STORAGE_AREA_FK_I";
+
+	// Index Brand
+	private static final String INDEX_BRAND_PK = "BRAND_PK_I";
+	private static final String INDEX_BRAND_ITEM_FK = "BRAND_ITEM_FK_I";
+
+	// Index Category
+	private static final String INDEX_CATEGORY_PK = "CATEGORY_PK_I";
+
+	// Index Storage Area
+	private static final String INDEX_STORAGE_AREA_PK = "STORAGE_AREA_PK_I";
+
+	// Index List
+	private static final String INDEX_SHOPPING_LIST_PK = "SHOPPING_LIST_PK_I";
+	private static final String INDEX_SHOPPING_LIST_BRAND_FK = "SHOPPING_LIST_BRAND_FK_I";
+	private static final String INDEX_SHOPPING_LIST_ITEM_FK = "SHOPPING_LIST_ITEM_FK_I";
+	
+	// Index Buyed List
+	private static final String INDEX_BUYED_LIST_PK = "BUYED_LIST_PK_I";
+	private static final String INDEX_BUYED_LIST_BRAND_FK = "BUYED_LIST_BRAND_FK_I";
+	private static final String INDEX_BUYED_LIST_ITEM_FK = "BUYED_LIST_ITEM_FK_I";
+
+	// Create Item table
+	private static final String CREATE_TABLE_ITEM = "CREATE TABLE "
+			+ TABLE_ITEM + "(" 
+			+ ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+			+ ITEM_NAME + " TEXT NOT NULL, " 
+			+ ITEM_TYPE + " INTEGER NOT NULL, "
+			+ ITEM_ESSENTIAL + " INTEGER, "
+			+ ITEM_MINIMUM + " INTEGER, "
+			+ ITEM_QUANTITY + " INTEGER, "
+			+ ITEM_CATEGORY_ID + " INTEGER, " 
+			+ ITEM_STORAGE_AREA_ID + " INTEGER, " 
+			+ "foreign key (" + ITEM_CATEGORY_ID + ") references " + TABLE_CATEGORY + " (" + ID + "), "			
+			+ "foreign key (" + ITEM_STORAGE_AREA_ID + ") references " + TABLE_STORAGE_AREA + " (" + ID + "))";
+ 
+	// Create Index PK Item
+	private static final String CREATE_INDEX_ITEM_PK = "CREATE INDEX IF NOT EXISTS "
+			+ INDEX_ITEM_PK + " ON " + TABLE_ITEM + " (" + ID + ")";
+
+	// Create Index FK Item Category
+	private static final String CREATE_INDEX_ITEM_CATEGORY_FK = "CREATE INDEX IF NOT EXISTS "
+			+ INDEX_ITEM_CATEGORY_FK
+			+ " ON "
+			+ TABLE_ITEM
+			+ " ("
+			+ ITEM_CATEGORY_ID + ")";
+
+	// Create Index FK Item Brand
+	private static final String CREATE_INDEX_ITEM_STORAGE_AREA_FK = "CREATE INDEX IF NOT EXISTS "
+			+ INDEX_ITEM_STORAGE_AREA_FK
+			+ " ON "
+			+ TABLE_ITEM
+			+ " ("
+			+ ITEM_STORAGE_AREA_ID + ")";
+
+	// Create Brand table
+	private static final String CREATE_TABLE_BRAND = "CREATE TABLE "
+			+ TABLE_BRAND + "(" 
+			+ ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+			+ BRAND_NAME + " TEXT NOT NULL, " 
+			+ BRAND_DESCRIPTION + " TEXT, "
+			+ BRAND_BARCODE + " TEXT, " 
+			+ BRAND_PRICE + " DOUBLE, "
+			+ BRAND_QUANTITY + " INTEGER, " 
+			+ BRAND_NEED + " INTEGER, "
+			+ BRAND_FAVOURITE + " INTEGER, "
+			+ BRAND_ITEM_ID + " INTEGER NOT NULL, "
+		    + "foreign key (" + BRAND_ITEM_ID + ") references " + TABLE_ITEM + " (" + ID + "))";
+
+	// Create Index PK Brand
+	private static final String CREATE_INDEX_BRAND_PK = "CREATE INDEX IF NOT EXISTS "
+			+ INDEX_BRAND_PK + " ON " + TABLE_BRAND + " (" + ID + ")";
+	
+	// Create Index FK Item Brand
+	private static final String CREATE_INDEX_BRAND_ITEM_FK = "CREATE INDEX IF NOT EXISTS "
+			+ INDEX_BRAND_ITEM_FK
+			+ " ON "
+			+ TABLE_BRAND
+			+ " ("
+			+ BRAND_ITEM_ID
+			+ ")";
+
+	// Create Category table
+	private static final String CREATE_TABLE_CATEGORY = "CREATE TABLE "
+			+ TABLE_CATEGORY + "(" + ID
+			+ " INTEGER PRIMARY KEY AUTOINCREMENT, " + CATEGORY_NAME
+			+ " TEXT NOT NULL " + ")";
+
+	// Create Index PK Category
+	private static final String CREATE_INDEX_CATEGORY_PK = "CREATE INDEX IF NOT EXISTS "
+			+ INDEX_CATEGORY_PK + " ON " + TABLE_CATEGORY + " (" + ID + ")";
+
+	// Create Storage Area table
+	private static final String CREATE_TABLE_STORAGE_AREA = "CREATE TABLE "
+			+ TABLE_STORAGE_AREA + "(" + ID
+			+ " INTEGER PRIMARY KEY AUTOINCREMENT, " + STORAGE_AREA_NAME
+			+ " TEXT NOT NULL " + ")";
+
+	// Create Index PK Storage Area
+	private static final String CREATE_INDEX_STORAGE_AREA_PK = "CREATE INDEX IF NOT EXISTS "
+			+ INDEX_STORAGE_AREA_PK
+			+ " ON "
+			+ TABLE_STORAGE_AREA
+			+ " ("
+			+ ID
+			+ ")";
+
+	// Create Shopping List table
+	private static final String CREATE_TABLE_SHOPPING_LIST = "CREATE TABLE "
+			+ TABLE_SHOPPING_LIST + "(" + ID
+			+ " INTEGER PRIMARY KEY AUTOINCREMENT, " 
+			+ SHOPPING_LIST_BRAND_ID + " INTEGER, "
+			+ SHOPPING_LIST_ITEM_ID + " INTEGER, "
+			+ "foreign key (" + SHOPPING_LIST_BRAND_ID + ") references " + TABLE_BRAND + " (" + ID + "), " 
+			+ "foreign key (" + SHOPPING_LIST_ITEM_ID
+			+ ") references " + TABLE_ITEM + " (" + ID + "))";
+
+	// Create Index PK Shopping List
+	private static final String CREATE_INDEX_SHOPPING_LIST_PK = "CREATE INDEX IF NOT EXISTS "
+			+ INDEX_SHOPPING_LIST_PK
+			+ " ON "
+			+ TABLE_SHOPPING_LIST
+			+ " ("
+			+ ID
+			+ ")";
+
+	// Create Index FK Shopping List Brand
+	private static final String CREATE_INDEX_SHOPPING_LIST_BRAND_FK = "CREATE INDEX IF NOT EXISTS "
+			+ INDEX_SHOPPING_LIST_BRAND_FK
+			+ " ON "
+			+ TABLE_SHOPPING_LIST
+			+ " (" + SHOPPING_LIST_BRAND_ID + ")";
+
+	// Create Index FK Shopping List Item
+	private static final String CREATE_INDEX_SHOPPING_LIST_ITEM_FK = "CREATE INDEX IF NOT EXISTS "
+			+ INDEX_SHOPPING_LIST_ITEM_FK
+			+ " ON "
+			+ TABLE_SHOPPING_LIST
+			+ " ("
+			+ SHOPPING_LIST_ITEM_ID + ")";
+	
+	// Create Buyed List table
+	private static final String CREATE_TABLE_BUYED_LIST = "CREATE TABLE "
+			+ TABLE_BUYED_LIST + "(" + ID
+			+ " INTEGER PRIMARY KEY AUTOINCREMENT, " 
+			+ BUYED_LIST_BRAND_ID + " INTEGER, "
+			+ BUYED_LIST_ITEM_ID + " INTEGER, "
+			+ "foreign key (" + BUYED_LIST_BRAND_ID + ") references " + TABLE_BRAND + " (" + ID + "), " 
+			+ "foreign key (" + BUYED_LIST_ITEM_ID
+			+ ") references " + TABLE_ITEM + " (" + ID + "))";
+
+	// Create Index PK Buyed List
+	private static final String CREATE_INDEX_BUYED_LIST_PK = "CREATE INDEX IF NOT EXISTS "
+			+ INDEX_BUYED_LIST_PK
+			+ " ON "
+			+ TABLE_BUYED_LIST
+			+ " ("
+			+ ID
+			+ ")";
+
+	// Create Index FK Buyed List Brand
+	private static final String CREATE_INDEX_BUYED_LIST_BRAND_FK = "CREATE INDEX IF NOT EXISTS "
+			+ INDEX_BUYED_LIST_BRAND_FK
+			+ " ON "
+			+ TABLE_BUYED_LIST
+			+ " (" + BUYED_LIST_BRAND_ID + ")";
+
+	// Create Index FK Buyed List Item
+	private static final String CREATE_INDEX_BUYED_LIST_ITEM_FK = "CREATE INDEX IF NOT EXISTS "
+			+ INDEX_BUYED_LIST_ITEM_FK
+			+ " ON "
+			+ TABLE_BUYED_LIST
+			+ " ("
+			+ BUYED_LIST_ITEM_ID + ")";
+	
+	public DBManager(Context context) {
+		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+	}
+
+	@Override
+	public void onCreate(SQLiteDatabase db) {
+		// Tables	
+		db.execSQL(CREATE_TABLE_CATEGORY);
+		db.execSQL(CREATE_TABLE_STORAGE_AREA);		
+		db.execSQL(CREATE_TABLE_ITEM);
+		db.execSQL(CREATE_TABLE_BRAND);	
+		db.execSQL(CREATE_TABLE_SHOPPING_LIST);
+		db.execSQL(CREATE_TABLE_BUYED_LIST);
+		
+		// Index
+		db.execSQL(CREATE_INDEX_ITEM_PK);		
+		db.execSQL(CREATE_INDEX_ITEM_CATEGORY_FK);
+		db.execSQL(CREATE_INDEX_ITEM_STORAGE_AREA_FK);
+		db.execSQL(CREATE_INDEX_BRAND_PK);
+		db.execSQL(CREATE_INDEX_BRAND_ITEM_FK);
+		db.execSQL(CREATE_INDEX_CATEGORY_PK);
+		db.execSQL(CREATE_INDEX_STORAGE_AREA_PK);
+		db.execSQL(CREATE_INDEX_SHOPPING_LIST_PK);
+		db.execSQL(CREATE_INDEX_SHOPPING_LIST_BRAND_FK);
+		db.execSQL(CREATE_INDEX_SHOPPING_LIST_ITEM_FK);
+		db.execSQL(CREATE_INDEX_BUYED_LIST_PK);
+		db.execSQL(CREATE_INDEX_BUYED_LIST_BRAND_FK);
+		db.execSQL(CREATE_INDEX_BUYED_LIST_ITEM_FK);
+	}
+
+	@Override
+	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		// Tables
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_CATEGORY);
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_STORAGE_AREA);		
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_ITEM);
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_BRAND);	
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_SHOPPING_LIST);
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_BUYED_LIST);
+		
+		// Index
+		db.execSQL("DROP INDEX IF EXISTS " + INDEX_ITEM_PK);
+		db.execSQL("DROP INDEX IF EXISTS " + INDEX_ITEM_CATEGORY_FK);
+		db.execSQL("DROP INDEX IF EXISTS " + INDEX_ITEM_STORAGE_AREA_FK);
+		db.execSQL("DROP INDEX IF EXISTS " + INDEX_BRAND_PK);
+		db.execSQL("DROP INDEX IF EXISTS " + INDEX_BRAND_ITEM_FK);
+		db.execSQL("DROP INDEX IF EXISTS " + INDEX_CATEGORY_PK);
+		db.execSQL("DROP INDEX IF EXISTS " + INDEX_STORAGE_AREA_PK);
+		db.execSQL("DROP INDEX IF EXISTS " + INDEX_SHOPPING_LIST_PK);
+		db.execSQL("DROP INDEX IF EXISTS " + INDEX_SHOPPING_LIST_BRAND_FK);
+		db.execSQL("DROP INDEX IF EXISTS " + INDEX_SHOPPING_LIST_ITEM_FK);
+		db.execSQL("DROP INDEX IF EXISTS " + INDEX_BUYED_LIST_PK);
+		db.execSQL("DROP INDEX IF EXISTS " + INDEX_BUYED_LIST_BRAND_FK);
+		db.execSQL("DROP INDEX IF EXISTS " + INDEX_BUYED_LIST_ITEM_FK);
+
+		onCreate(db);
+	}
+
+	public abstract long insert(T t);
+
+	public abstract void delete(long id);
+
+	public abstract void update(T t);
+
+	public abstract T getSingle(long id);
+
+	public abstract ArrayList<T> getAll();
+
+	// Closing database
+	protected void closeDB() {
+		SQLiteDatabase db = this.getReadableDatabase();
+
+		if (db != null && db.isOpen()) {
+			db.close();
+		}
+	}
+
+}

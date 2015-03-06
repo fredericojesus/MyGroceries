@@ -1,0 +1,100 @@
+package com.example.mygroceries.database;
+
+import java.util.ArrayList;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
+public class DBCategory extends DBManager<Category> {
+
+	public DBCategory(Context context) {
+		super(context);
+	}
+
+	@Override
+	public long insert(Category category) {
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		ContentValues values = new ContentValues();
+
+		values.put(CATEGORY_NAME, category.getName());
+
+		long product_id = db.insert(TABLE_CATEGORY, null, values);
+
+		closeDB();
+
+		return product_id;
+	}
+
+	@Override
+	public void delete(long id) {
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		db.delete(TABLE_CATEGORY, ID + " = ?",
+				new String[] { String.valueOf(id) });
+
+		closeDB();
+	}
+
+	@Override
+	public void update(Category category) {
+		SQLiteDatabase dataBase = this.getWritableDatabase();
+
+		ContentValues values = new ContentValues();
+
+		values.put(CATEGORY_NAME, category.getName());
+
+		dataBase.update(TABLE_CATEGORY, values, ID + " = ?",
+				new String[] { String.valueOf(category.getId()) });
+
+		closeDB();
+	}
+
+	@Override
+	public Category getSingle(long id) {
+		SQLiteDatabase db = this.getReadableDatabase();
+
+		String selectQuery = "SELECT *" + " FROM " + TABLE_CATEGORY + " WHERE "
+				+ ID + " = " + id;
+
+		Cursor c = db.rawQuery(selectQuery, null);
+
+		if (c != null) {
+			c.moveToFirst();
+		}
+
+		Category category = new Category();
+		category.setId(c.getLong(c.getColumnIndex(ID)));
+		category.setName(c.getString(c.getColumnIndex(CATEGORY_NAME)));
+
+		closeDB();
+
+		return category;
+	}
+
+	@Override
+	public ArrayList<Category> getAll() {
+		SQLiteDatabase db = this.getReadableDatabase();
+		ArrayList<Category> Categories = new ArrayList<Category>();
+
+		String selectQuery = "SELECT * FROM " + TABLE_CATEGORY;
+
+		Cursor c = db.rawQuery(selectQuery, null);
+
+		if (c.moveToFirst()) {
+			do {
+				Category category = new Category();
+				category.setId(c.getInt((c.getColumnIndex(ID))));
+				category.setName((c.getString(c.getColumnIndex(CATEGORY_NAME))));
+
+				Categories.add(category);
+			} while (c.moveToNext());
+		}
+
+		closeDB();
+
+		return Categories;
+	}
+}

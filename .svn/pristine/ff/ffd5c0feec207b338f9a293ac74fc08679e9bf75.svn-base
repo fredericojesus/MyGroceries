@@ -1,0 +1,158 @@
+package com.example.mygroceries.database;
+
+import android.content.Context;
+
+public class ParaApagar {
+	public ParaApagar(Context context){		
+		insertCategory(context); 
+		insertSorageArea(context);
+		insertItem(context);
+		insertBrand(context);
+	}
+	
+	private void insertCategory(Context context){
+		Category c1 = new Category();
+		c1.setName("Category 1");
+		
+		Category c2 = new Category();
+		c2.setName("Category 2");
+		
+		Category c3 = new Category();
+		c3.setName("Category 3");
+		
+		Category c4 = new Category();
+		c4.setName("Category 4");
+		
+		Category c5 = new Category();
+		c5.setName("Category 5");
+		
+		DBCategory db = new DBCategory(context);
+		db.insert(c1);
+		db.insert(c2);
+		db.insert(c3);
+		db.insert(c4);
+		db.insert(c5);
+	}
+	
+	private void insertSorageArea(Context context){
+		StorageArea c1 = new StorageArea();
+		c1.setName("StorageArea 1");
+		
+		StorageArea c2 = new StorageArea();
+		c2.setName("StorageArea 2");
+		
+		StorageArea c3 = new StorageArea();
+		c3.setName("StorageArea 3");
+		
+		StorageArea c4 = new StorageArea();
+		c4.setName("StorageArea 4");
+		
+		StorageArea c5 = new StorageArea();
+		c5.setName("StorageArea 5");
+		
+		DBStorageArea db = new DBStorageArea(context);
+		db.insert(c1);
+		db.insert(c2);
+		db.insert(c3);
+		db.insert(c4);
+		db.insert(c5);
+	}
+	
+	private void insertBrand(Context context){		
+		Brand b1 = new Brand();
+		b1.setName("Brand 1 ");
+		b1.setBarCode("111111111111");
+		b1.setDescription("Brand 1");
+		b1.setPrice(12.2);
+		b1.setQuantity(2);
+		b1.setItemId(1);
+		
+		Brand b2 = new Brand();
+		b2.setName("Brand 2 ");
+		b2.setBarCode("222222222222");
+		b2.setDescription("Brand 2");
+		b2.setPrice(12.2);
+		b2.setQuantity(2);
+		b2.setItemId(4);
+		
+		Brand b3 = new Brand();
+		b3.setName("Brand 3 ");
+		b3.setBarCode("333333333333");
+		b3.setDescription("Brand 3");
+		b3.setPrice(12.2);
+		b3.setQuantity(1);
+		b3.setItemId(4);
+		
+		Brand b4 = new Brand();
+		b4.setName("Brand 4 ");
+		b4.setBarCode("444444444444");
+		b4.setDescription("Brand 4");
+		b4.setPrice(12.2);
+		b4.setQuantity(2);
+		b4.setItemId(4);
+		
+		Brand b5 = new Brand();
+		b5.setName("Brand 5 ");
+		b5.setBarCode("555555555555");
+		b5.setDescription("Brand 5");
+		b5.setPrice(12.2);
+		b5.setQuantity(3);
+		b5.setItemId(3);
+		
+		Brand b6 = new Brand();
+		b6.setName("Brand 6 ");
+		b6.setBarCode("666666666666");
+		b6.setDescription("Brand 6");
+		b6.setPrice(12.2);
+		b6.setQuantity(0);
+		b6.setItemId(1);
+		
+		DBBrand db = new DBBrand(context);
+		db.insert(b1);
+		db.insert(b2);
+		db.insert(b3);
+		db.insert(b4);
+		db.insert(b5);
+		db.insert(b6);
+	}
+	
+	private void insertItem(Context context){
+		Item i1 = new Item();
+		i1.setName("Item 1");
+		i1.setType(1);
+		i1.setFavourite(1);
+		i1.setMinimum(0);
+		i1.setCategoryId(1);
+		i1.setStorageAreaId(1);
+		
+		Item i2 = new Item();
+		i2.setName("Item 2");
+		i2.setType(0);
+		i2.setFavourite(1);
+		i2.setMinimum(0);
+		i2.setCategoryId(2);
+		i2.setStorageAreaId(4);
+		
+		Item i3 = new Item();
+		i3.setName("Item 3");
+		i3.setType(1);
+		i3.setFavourite(1);
+		i3.setMinimum(0);
+		i3.setCategoryId(1);
+		i3.setStorageAreaId(5);
+		
+		Item i4 = new Item();
+		i4.setName("Item 4");
+		i4.setType(1);
+		i4.setFavourite(1);
+		i4.setMinimum(0);
+		i4.setCategoryId(3);
+		i4.setStorageAreaId(5);
+		
+		DBItem db = new DBItem(context);
+		db.insert(i1);
+		db.insert(i2);
+		db.insert(i3);
+		db.insert(i4);		
+	}
+}

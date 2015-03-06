@@ -1,0 +1,278 @@
+package com.example.mygroceries.database;
+
+import android.content.Context;
+
+public class DefaultValues {
+	public DefaultValues(Context context){		
+		insertCategory(context); 
+		insertSorageArea(context);
+		insertItem(context);
+		insertBrand(context);
+	}
+	
+	private void insertCategory(Context context){
+		Category c1 = new Category();
+		c1.setName("Carnes");
+		
+		Category c2 = new Category();
+		c2.setName("Bebidas");
+		
+		Category c3 = new Category();
+		c3.setName("Limpeza");
+		
+		Category c4 = new Category();
+		c4.setName("Frutas");
+		
+		Category c5 = new Category();
+		c5.setName("Legumes");
+		
+		Category c6 = new Category();
+		c6.setName("Peixes");
+		
+		Category c7 = new Category();
+		c7.setName("Doces");
+		
+		Category c8 = new Category();
+		c8.setName("Lacticínios");
+		
+		Category c9 = new Category();
+		c9.setName("Pequeno almoço");
+		
+		Category c10 = new Category();
+		c10.setName("Enchidos");
+		
+		Category c11 = new Category();
+		c11.setName("Derivados de Cereais");
+		
+		Category c12 = new Category();
+		c12.setName("Tubérculo");
+		
+		Category c13= new Category();
+		c13.setName("Higiene Pessoal");
+		
+		
+		DBCategory db = new DBCategory(context);
+		db.insert(c1);
+		db.insert(c2);
+		db.insert(c3);
+		db.insert(c4);
+		db.insert(c5);
+		db.insert(c6);
+		db.insert(c7);
+		db.insert(c8);
+		db.insert(c9);
+		db.insert(c10);
+		db.insert(c11);
+		db.insert(c12);
+		db.insert(c13);
+	}
+	
+	private void insertSorageArea(Context context){
+		StorageArea c1 = new StorageArea();
+		c1.setName("Frigorífico");
+		
+		StorageArea c2 = new StorageArea();
+		c2.setName("Congelador");
+		
+		StorageArea c3 = new StorageArea();
+		c3.setName("Dispensa");
+		
+		StorageArea c4 = new StorageArea();
+		c4.setName("StorageArea 4");
+		
+		StorageArea c5 = new StorageArea();
+		c5.setName("StorageArea 5");
+		
+		DBStorageArea db = new DBStorageArea(context);
+		db.insert(c1);
+		db.insert(c2);
+		db.insert(c3);
+		db.insert(c4);
+		db.insert(c5);
+	}
+	
+	private void insertBrand(Context context){		
+		
+	}
+	
+	private void insertItem(Context context){
+		Item i1 = new Item();
+		i1.setName("Leite");
+		i1.setType(0);
+		i1.setEssential(1);
+		i1.setCategoryId(8);
+		
+		Item i2 = new Item();
+		i2.setName("Cereais");
+		i2.setType(0);
+		i2.setEssential(1);
+		i2.setCategoryId(9);
+			
+		Item i3 = new Item();
+		i3.setName("Pão");
+		i3.setType(1);
+		i3.setEssential(1);
+		i3.setCategoryId(9);
+		
+		Item i4 = new Item();
+		i4.setName("Bolachas");
+		i4.setType(0);
+		i4.setEssential(1);
+		i4.setCategoryId(7);
+		
+		Item i5 = new Item();
+		i5.setName("Queijo");
+		i5.setType(1);
+		i5.setEssential(1);
+		i5.setCategoryId(7);
+		
+		Item i6 = new Item();
+		i6.setName("Fiambre");
+		i6.setType(1);
+		i6.setEssential(1);
+		i6.setCategoryId(10);
+		
+		Item i7 = new Item();
+		i7.setName("Banana");
+		i7.setType(1);
+		i7.setEssential(1);
+		i7.setCategoryId(4);
+		
+		Item i8 = new Item();
+		i8.setName("Maçã");
+		i8.setType(1);
+		i8.setEssential(1);
+		i8.setCategoryId(4);
+		
+		Item i9 = new Item();
+		i9.setName("Cenoura");
+		i9.setType(1);
+		i9.setEssential(1);
+		i9.setCategoryId(5);
+		
+		Item i10 = new Item();
+		i10.setName("Alface");
+		i10.setType(1);
+		i10.setEssential(1);
+		i10.setCategoryId(5);
+		
+		Item i11 = new Item();
+		i11.setName("Uva");
+		i11.setType(1);
+		i11.setEssential(0);
+		i11.setCategoryId(4);
+		
+		Item i12 = new Item();
+		i12.setName("Arroz");
+		i12.setType(0);
+		i12.setEssential(1);
+		i12.setCategoryId(11);
+		
+		Item i13 = new Item();
+		i13.setName("Batata");
+		i13.setType(1);
+		i13.setEssential(1);
+		i13.setCategoryId(12);
+		
+		Item i14 = new Item();
+		i14.setName("Batata Doce");
+		i14.setType(1);
+		i14.setEssential(0);
+		i14.setCategoryId(12);
+		
+		Item i15 = new Item();
+		i15.setName("Massa");
+		i15.setType(1);
+		i15.setEssential(1);
+		i15.setCategoryId(12);
+		
+		Item i16 = new Item();
+		i16.setName("Iogurte");
+		i16.setType(0);
+		i16.setEssential(1);
+		i16.setCategoryId(8);
+		
+		Item i17 = new Item();
+		i17.setName("Laranja");
+		i17.setType(1);
+		i17.setEssential(1);
+		i17.setCategoryId(4);
+		
+		Item i18 = new Item();
+		i18.setName("Desodorizante");
+		i18.setType(0);
+		i18.setEssential(1);
+		i18.setCategoryId(13);
+		
+		Item i19 = new Item();
+		i19.setName("Shampoo");
+		i19.setType(0);
+		i19.setEssential(1);
+		i19.setCategoryId(13);
+		
+		Item i20 = new Item();
+		i20.setName("Pasta Dentífrica");
+		i20.setType(0);
+		i20.setEssential(1);
+		i20.setCategoryId(13);
+		
+		Item i21 = new Item();
+		i21.setName("Detergente para Loiça");
+		i21.setType(0);
+		i21.setEssential(1);
+		i21.setCategoryId(3);
+		
+		Item i22 = new Item();
+		i22.setName("Detergente para Roupa");
+		i22.setType(0);
+		i22.setEssential(1);
+		i22.setCategoryId(3);
+		
+		Item i23 = new Item();
+		i23.setName("Lixívia");
+		i23.setType(0);
+		i23.setEssential(1);
+		i23.setCategoryId(3);
+		
+		Item i24 = new Item();
+		i24.setName("Produto de Móveis");
+		i24.setType(0);
+		i24.setEssential(1);
+		i24.setCategoryId(3);
+		
+		Item i25 = new Item();
+		i25.setName("Produto de Vidros");
+		i25.setType(0);
+		i25.setEssential(1);
+		i25.setCategoryId(3);
+		
+		Item i26 = new Item();
+		i26.setName("Lava-tudo");
+		i26.setType(0);
+		i26.setEssential(1);
+		i26.setCategoryId(3);
+		
+		DBItem db = new DBItem(context);
+		db.insert(i1);
+		db.insert(i2);
+		db.insert(i3);
+		db.insert(i4);		
+		db.insert(i5);
+		db.insert(i6);
+		db.insert(i7);
+		db.insert(i8);
+		db.insert(i9);
+		db.insert(i10);
+		db.insert(i11);
+		db.insert(i12);
+		db.insert(i13);
+		db.insert(i14);
+		db.insert(i15);
+		db.insert(i16);
+		db.insert(i17);
+		db.insert(i18);
+		db.insert(i19);
+		db.insert(i20);
+		
+	}
+}

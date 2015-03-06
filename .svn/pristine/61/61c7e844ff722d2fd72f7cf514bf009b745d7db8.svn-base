@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout 
+    	xmlns:android="http://schemas.android.com/apk/res/android"
+	    xmlns:tools="http://schemas.android.com/tools"
+	    android:layout_width="fill_parent"
+    	android:layout_height="wrap_content" >
+	    
+	<ScrollView
+	    android:id="@+id/scrollView_shopping"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content" >
+	
+		<RelativeLayout
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:orientation="vertical" 
+		    tools:context=".ShoppingListActivity" >
+		    
+		    <TextView 
+		        android:id="@+id/toBuy_list_textView"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		    	android:layout_marginTop="@dimen/padding_10dp"
+		        android:layout_alignParentTop="true"
+		        android:layout_centerHorizontal="true"
+		        android:textStyle="bold"
+		        android:textSize="20sp"
+		        android:text="@string/title_toBuy_list" />
+		    
+		     <View
+		        android:id="@+id/view_sl"
+		        android:layout_width="fill_parent"
+		        android:layout_height="1dp"
+		        android:layout_marginLeft="@dimen/padding_10dp"
+		    	android:layout_marginRight="@dimen/padding_10dp"
+		        android:layout_below="@+id/toBuy_list_textView"
+		        android:layout_marginTop="@dimen/padding_5dp"
+		        android:background="@android:color/holo_blue_light" />
+		        
+		    <ExpandableListView
+		     	android:id="@+id/toBuy_list"
+		      	android:layout_width="match_parent"
+		      	android:layout_height="wrap_content"
+		      	android:layout_below="@+id/view_sl"
+		        android:layout_marginTop="@dimen/padding_5dp" >
+		  	</ExpandableListView>
+		  	
+		    <View
+		        android:id="@+id/view1_sl"
+		        android:layout_width="fill_parent"
+		        android:layout_height="3dp"
+		        android:layout_marginLeft="@dimen/padding_10dp"
+		    	android:layout_marginRight="@dimen/padding_10dp"
+		        android:layout_below="@+id/toBuy_list"
+		        android:layout_marginTop="@dimen/padding_5dp"
+		        android:background="@android:color/holo_blue_light" />
+		  	
+		    <TextView 
+		        android:id="@+id/buyed_list_textView"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_centerHorizontal="true"
+		        android:layout_below="@+id/view1_sl"
+		        android:layout_marginTop="@dimen/padding_5dp"
+		        android:textStyle="bold"
+		        android:textSize="20sp"
+		        android:text="@string/title_buyed_list" />
+		    
+		    <View
+		        android:id="@+id/view2_sl"
+		        android:layout_width="fill_parent"
+		        android:layout_height="1dp"
+		        android:layout_below="@+id/buyed_list_textView"
+		        android:layout_marginLeft="@dimen/padding_10dp"
+		    	android:layout_marginRight="@dimen/padding_10dp"
+		        android:layout_marginTop="@dimen/padding_5dp"
+		        android:background="@android:color/holo_blue_light" />
+		    
+		    <ExpandableListView
+		     	android:id="@+id/buyed_list"
+		      	android:layout_width="match_parent"
+		      	android:layout_height="wrap_content"
+		      	android:layout_below="@+id/view2_sl"
+		        android:layout_marginTop="@dimen/padding_5dp" >
+		  	</ExpandableListView>
+		
+		</RelativeLayout>
+	</ScrollView>
+	
+	<TextView 
+	    android:id="@+id/start_shopping_textView"
+	    android:layout_width="wrap_content"
+		android:layout_height="@dimen/padding_40dp"
+		android:layout_alignParentBottom="true"
+		android:layout_alignParentLeft="true"
+		android:layout_alignRight="@+id/view3_sl"
+		android:layout_marginTop="@dimen/padding_5dp"
+		android:layout_marginBottom="@dimen/padding_10dp"
+		android:layout_marginRight="3dp" 
+		android:gravity="center"
+		android:textSize="20sp"
+		android:text="@string/shopping_list_start"
+		android:textColor="#FFFFFF"
+		android:background="@color/button_background"  />
+	
+	<View
+        android:id="@+id/view3_sl"
+        android:layout_width="3dp"
+        android:layout_height="@dimen/padding_40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/padding_10dp"
+        android:layout_marginTop="@dimen/padding_5dp"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/holo_blue_light" />
+	
+	<TextView 
+	    android:id="@+id/finish_shopping_textView"
+	    android:layout_width="wrap_content"
+		android:layout_height="@dimen/padding_40dp"
+	    android:layout_alignParentBottom="true"
+	    android:layout_alignParentRight="true"
+	    android:layout_alignLeft="@+id/view3_sl"
+		android:layout_marginTop="@dimen/padding_5dp"
+		android:layout_marginBottom="@dimen/padding_10dp"
+		android:layout_marginLeft="3dp" 
+		android:gravity="center"
+		android:textSize="20sp"
+		android:text="@string/shopping_list_finish"
+		android:textColor="#FFFFFF"
+		android:background="@color/button_background" />
+	
+</RelativeLayout>

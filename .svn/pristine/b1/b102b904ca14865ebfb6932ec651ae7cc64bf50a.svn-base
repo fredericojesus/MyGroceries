@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Menu -->
+    <string name="app_name">PMS</string>
+    <string name="action_settings">Settings</string>
+    <string name="codebar_reader_text">Ler Código de Barras</string>
+    <string name="shopping_list_text">Lista de Compras</string>
+    <string name="manage_stock_text">Gerir Stock</string>
+    <string name="help_text">Ajuda</string>
+
+    <!-- Buttons -->
+    <string name="button_add">+</string>
+    <string name="button_del">-</string>
+
+    <!-- Titles -->
+    <string name="title_activity_item">Itens</string>
+    <string name="title_activity_category">Categorias</string>
+    <string name="title_activity_storage_area">Secções</string>
+    <string name="title_activity_tabs">TabsActivity</string>
+
+</resources>

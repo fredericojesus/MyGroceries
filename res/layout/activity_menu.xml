@@ -1,0 +1,56 @@
+<ScrollView 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    
+	<RelativeLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:paddingBottom="@dimen/activity_vertical_margin"
+	    android:paddingLeft="@dimen/activity_horizontal_margin"
+	    android:paddingRight="@dimen/activity_horizontal_margin"
+	    android:paddingTop="@dimen/activity_vertical_margin"
+	    tools:context=".MenuActivity" >
+	
+	    <com.example.mygroceries.widget.MyButton
+	        android:id="@+id/codebar_reader_button"
+	        android:layout_width="@dimen/menu_buttons_width"
+	        android:layout_height="@dimen/menu_buttons_height"
+	        android:layout_alignParentTop="true"
+	        android:layout_centerHorizontal="true"
+	        android:layout_marginTop="@dimen/menu_buttons_marginTop"
+	        android:onClick="scanCodeBar"
+	        android:text="@string/codebar_reader_text" />
+	
+	    <com.example.mygroceries.widget.MyButton
+	        android:id="@+id/shopping_list_button"
+	        android:layout_width="@dimen/menu_buttons_width"
+	        android:layout_height="@dimen/menu_buttons_height"
+	        android:layout_below="@+id/codebar_reader_button"
+	        android:layout_centerHorizontal="true"
+	        android:layout_marginTop="@dimen/menu_buttons_marginButtons"
+	        android:onClick="showShoppingListActivity"
+	        android:text="@string/shopping_list_text" />
+	    
+	    <com.example.mygroceries.widget.MyButton
+	        android:id="@+id/manage_stock_button"
+	        android:layout_width="@dimen/menu_buttons_width"
+	        android:layout_height="@dimen/menu_buttons_height"
+	        android:layout_below="@+id/shopping_list_button"
+	        android:layout_centerHorizontal="true"
+	        android:layout_marginTop="@dimen/menu_buttons_marginButtons"
+	        android:onClick="showTabsActivity"
+	        android:text="@string/manage_stock_text" />
+	    
+	    <com.example.mygroceries.widget.MyButton
+	        android:id="@+id/help_button"
+	        android:layout_width="@dimen/menu_buttons_width"
+	        android:layout_height="@dimen/menu_buttons_height"
+	        android:layout_centerHorizontal="true"
+	        android:layout_below="@+id/manage_stock_button"
+	        android:layout_marginTop="@dimen/menu_buttons_marginButtons"
+	        android:text="@string/help_text" />
+	
+	</RelativeLayout>
+</ScrollView>

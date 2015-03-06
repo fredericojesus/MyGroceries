@@ -1,0 +1,147 @@
+package com.example.mygroceries.database;
+/*package com.example.pms_project.database;
+
+import java.util.List;
+
+import android.app.Activity;
+import android.database.sqlite.SQLiteException;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+
+import com.example.pms_project.R;
+
+public class MainActivity extends Activity {
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_menus);
+		
+//		type();
+		products();
+	}
+
+	private void type() {
+		DBCategory db = new DBCategory(getApplicationContext());
+
+		Category category1 = new Category("Doces");
+		Category category2 = new Category("Legumes");
+
+		long category_id1 = db.insert(category1);
+		long category_id2 = db.insert(category2);
+
+		Log.d("type_id1 ", " 1 - " + category_id1);
+		Log.d("type_id2 ", " 2 - " + category_id2);
+
+		Log.d("Get Category", "Getting Single");
+
+		Category category3 = db.getSingle(2);
+		category3.setId(category3.getId());
+		category3.setName(category3.getName());
+
+		Log.d("Get Category", "ID- " + category3.getId() + " NAME - " + category3.getName());
+
+		Log.d("Get Todos", "Getting All ToDos");
+//
+//		List<Category> allToDos = db.getAll();
+//		for (Category category : allToDos) {
+//			Log.d("ToDo", category.getId() + " - " + category.getName());
+//		}
+
+//		Log.d("delete", "Delete");
+//		db.delete(5);
+//		db.delete(6);
+
+//		List<Type> allToDos1 = db.getAll();
+//		for (Type type : allToDos1) {
+//			Log.d("ToDo", type.getId() + " - " + type.getName());
+//		}
+
+//		Type type4 = new Type();
+//		type4.setId(17);
+//		type4.setName("Teste 1 ");
+//		db.update(type4);
+//
+//		Type type5 = db.getSingle(17);
+//		type5.setId(type5.getId());
+//		type5.setName(type5.getName());
+//
+//		Log.d("Get Type", "ID- " + type5.getId() + " NAME - " + type5.getName());
+
+		db.closeDB();
+	}
+
+	private void products() {
+		DBProducts db = new DBProducts(getApplicationContext());
+
+		Product product1 = new Product();
+		product1.setBarCode("1000");
+		product1.setName("Teste 2");
+		product1.setPrice(120);
+		product1.setCategoryId(2);
+		
+		try{
+			long product_id = db.insert(product1);
+			Log.d("PRODUCTS", "Guardado com o ID " + product_id);	
+		}catch (SQLiteException e){
+			Log.d("PRODUCTS", "ERRO");	
+		}
+
+		Log.d("ToDo", "Antes");
+		List<Product> allToDos = db.getAll();
+		for (Product product : allToDos) {
+			Log.d("ToDo", product.getId() + " - " + product.getName() + " - "
+					+ product.getBarCode());
+		}
+		Log.d("ToDo", "Depois");
+		
+		Product product2 = new Product();
+		product2.setId(1);
+		product2.setBarCode("10000");
+		product2.setName("Teste 2");
+		product2.setPrice(120);
+		product2.setCategoryId(2);
+		
+		try{
+			db.update(product2);
+		}catch (SQLiteException e){
+			Log.d("PRODUCTS", "ERRO2");	
+		}
+		
+		
+		List<Product> allToDos1 = db.getAll();
+		for (Product product : allToDos1) {
+			Log.d("ToDo", product.getId() + " - " + product.getName() + " - "
+					+ product.getBarCode());
+		}
+
+		db.closeDB();
+	}
+	
+	private void stock(){
+		DBStock db = new DBStock(getApplicationContext());
+		
+		Stock stock1 = new Stock();
+		stock1.setQuantity(100);
+		
+		long stock_id = db.insert(stock1);
+		
+		Log.d("STOCK", "Guardado com o ID " + stock_id);
+		
+//		List<Stock> allToDos = db.getAll();
+//		for (Stock stock : allToDos) {
+//			Log.d("STOCK", stock.getId() + " - " + stock.getQuantity());
+//		}
+//		
+		db.closeDB();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.menus, menu);
+		return true;
+	}
+
+}*/

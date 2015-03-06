@@ -1,0 +1,100 @@
+package com.example.mygroceries;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.View;
+
+import com.example.mygroceries.database.Category;
+import com.example.mygroceries.database.DBCategory;
+import com.example.mygroceries.database.DBStorageArea;
+import com.example.mygroceries.database.StorageArea;
+import com.example.mygroceries.widget.MyButton;
+
+public class MenuActivity extends Activity {
+
+	MyButton codebarReaderButton;
+	MyButton shoppingListButton;
+	MyButton manageStockButton;
+	MyButton helpButton;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_menu);
+
+		initTypeFace();
+		
+		// Para depois apagar
+//		insertCategory(); 
+//		insertSorageArea();
+	}
+	
+	private void insertCategory(){
+		Category c1 = new Category();
+		c1.setName("Category 1");
+		
+		Category c2 = new Category();
+		c2.setName("Category 2");
+		
+		Category c3 = new Category();
+		c3.setName("Category 3");
+		
+		Category c4 = new Category();
+		c4.setName("Category 4");
+		
+		Category c5 = new Category();
+		c5.setName("Category 5");
+		
+		DBCategory db = new DBCategory(this);
+		db.insert(c1);
+		db.insert(c2);
+		db.insert(c3);
+		db.insert(c4);
+		db.insert(c5);
+	}
+	
+	private void insertSorageArea(){
+		StorageArea c1 = new StorageArea();
+		c1.setName("StorageArea 1");
+		
+		StorageArea c2 = new StorageArea();
+		c2.setName("StorageArea 2");
+		
+		StorageArea c3 = new StorageArea();
+		c3.setName("StorageArea 3");
+		
+		StorageArea c4 = new StorageArea();
+		c4.setName("StorageArea 4");
+		
+		StorageArea c5 = new StorageArea();
+		c5.setName("StorageArea 5");
+		
+		DBStorageArea db = new DBStorageArea(this);
+		db.insert(c1);
+		db.insert(c2);
+		db.insert(c3);
+		db.insert(c4);
+		db.insert(c5);
+	}
+
+	private void initTypeFace() {
+		codebarReaderButton = (MyButton) findViewById(R.id.codebar_reader_button);
+		shoppingListButton = (MyButton) findViewById(R.id.shopping_list_button);
+		manageStockButton = (MyButton) findViewById(R.id.manage_stock_button);
+		helpButton = (MyButton) findViewById(R.id.help_button);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.menu, menu);
+		return true;
+	}
+	
+	public void showTabsActivity(View view) {
+		Intent intent = new Intent(MenuActivity.this, TabsActivity.class);
+        startActivity(intent);
+	}
+}

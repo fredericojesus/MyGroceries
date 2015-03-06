@@ -1,0 +1,44 @@
+package com.example.mygroceries;
+
+import java.util.ArrayList;
+
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListView;
+
+import com.example.mygroceries.adapter.CategoryAdapter;
+import com.example.mygroceries.database.Category;
+import com.example.mygroceries.database.DBCategory;
+
+public class CategoriesFragment extends Fragment {
+	private CategoryAdapter adapter;
+	private ListView categoriesList;
+	private View rootView;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		rootView = inflater.inflate(R.layout.fragment_categories, container,
+				false);
+
+		return rootView;
+	}
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+
+		categoriesList = (ListView) rootView.findViewById(R.id.category_list);
+
+		DBCategory db = new DBCategory(rootView.getContext());
+
+		ArrayList<Category> categories = db.getAll();
+
+		adapter = new CategoryAdapter(rootView.getContext(), categories);
+
+		categoriesList.setAdapter(adapter);
+	}
+}

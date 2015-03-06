@@ -1,0 +1,214 @@
+package com.example.mygroceries.adapter;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import android.app.Activity;
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.mygroceries.R;
+import com.example.mygroceries.database.Brand;
+import com.example.mygroceries.database.BuyedList;
+import com.example.mygroceries.database.DBBuyedList;
+import com.example.mygroceries.database.Item;
+
+public class TobuyListAdapter extends BaseExpandableListAdapter {
+	private Activity activity;
+	private Map<Item, ArrayList<Brand>> collections;
+	private Map<Item, ArrayList<Brand>> originalCollections;
+	private List<Item> list;
+	private List<Item> originalList;
+	private TextView itemId;
+	private EditText itemName;
+	private Context context;
+
+	public TobuyListAdapter(Context context, Activity activity, ArrayList<Item> list,
+			Map<Item, ArrayList<Brand>> collections) {
+		this.context = context;
+		this.activity = activity;
+		this.collections = collections;
+		this.list = list;
+
+		originalList = new ArrayList<Item>();
+		originalList.addAll(list);
+
+		originalCollections = new HashMap<Item, ArrayList<Brand>>();
+		originalCollections.putAll(collections);
+	}
+
+	@Override
+	public Brand getChild(int groupPosition, int childPosition) {
+		return collections.get(list.get(groupPosition)).get(childPosition);
+	}
+
+	@Override
+	public long getChildId(int groupPosition, int childPosition) {
+		return childPosition;
+	}
+
+	@Override
+	public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View view,
+			ViewGroup parent) {
+		final Brand brand = getChild(groupPosition, childPosition);
+		final Item item = getGroup(groupPosition);
+
+		LayoutInflater inflater = activity.getLayoutInflater();
+
+		if (view == null) {
+			view = inflater.inflate(R.layout.child_item, null);
+		}
+
+		TextView brandName = (TextView) view.findViewById(R.id.brand_text);
+		brandName.setText(brand.getName());
+
+		final TextView brandSubText = (TextView) view.findViewById(R.id.brand_sub_text);
+		if (item.getType() == 0) {
+			brandSubText.setText("" + brand.getQuantity());
+		} else {
+			if (brand.getNeed() == 0) {
+				brandSubText.setText(R.string.add_brand_notNeeded);
+			} else {
+				brandSubText.setText(R.string.add_brand_needed);
+			}
+		}
+
+		return view;
+	}
+
+	@Override
+	public int getChildrenCount(int groupPosition) {
+		if (collections != null && list != null && list.get(groupPosition) != null
+				&& collections.get(list.get(groupPosition)) != null) {
+			return collections.get(list.get(groupPosition)).size();
+		}
+
+		return 0;
+	}
+
+	@Override
+	public Item getGroup(int groupPosition) {
+		return list.get(groupPosition);
+	}
+
+	@Override
+	public int getGroupCount() {
+		return list.size();
+	}
+
+	@Override
+	public long getGroupId(int groupPosition) {
+		return groupPosition;
+	}
+
+	@Override
+	public View getGroupView(final int position, boolean isExpanded, View view, ViewGroup parent) {
+		final Item item = getGroup(position);
+
+		if (view == null) {
+			LayoutInflater infalInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			view = infalInflater.inflate(R.layout.parent_item, null);
+		}
+
+		TextView itemNameTV = (TextView) view.findViewById(R.id.itemText);
+		itemNameTV.setText(item.getName());
+
+		TextView itemQuantityNeedTV = (TextView) view.findViewById(R.id.quantity_need_Text);
+		if (item.getType() == 0)
+			itemQuantityNeedTV.setText("" + item.getQuantity());
+		else {
+			if (item.getType() == 1)
+				itemQuantityNeedTV.setText(R.string.add_brand_needed);
+			else
+				itemQuantityNeedTV.setText(R.string.add_brand_notNeeded);
+		}
+		
+		ImageView deleteImage = (ImageView) view.findViewById(R.id.item_delete);
+		deleteImage.setVisibility(View.GONE);
+		ImageView editImage = (ImageView) view.findViewById(R.id.item_edit);
+		editImage.setVisibility(View.GONE);
+		ImageView addImage = (ImageView) view.findViewById(R.id.item_add);
+		addImage.setVisibility(View.GONE);
+		
+		ImageView thumbsUpImage = (ImageView) view.findViewById(R.id.item_buyed);
+		thumbsUpImage.setVisibility(View.VISIBLE);
+		thumbsUpImage.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				TextView shoppingButton = (TextView) activity.findViewById(R.id.button_shopping_textView);
+				if (shoppingButton.getText().toString().equals(R.string.shopping_list_finish)) {
+					DBBuyedList db = new DBBuyedList(context);
+					db.insert(new BuyedList(item.getId()));
+				} else {
+					Toast toast = Toast.makeText(context, "Tem que começar as compras", Toast.LENGTH_SHORT);
+					toast.show();
+				}
+			}
+		});
+		
+		sortList();
+
+		return view;
+	}
+	
+	@Override
+	public boolean hasStableIds() {
+		return true;
+	}
+
+	@Override
+	public boolean isChildSelectable(int groupPosition, int childPosition) {
+		return true;
+	}
+
+	private void sortList() {
+		Collections.sort(list, new Comparator<Item>() {
+			@Override
+			public int compare(Item i1, Item i2) {
+				return i1.getName().compareTo(i2.getName());
+			}
+		});
+	}
+
+	public void filter(String charText) {
+		charText = charText.toLowerCase(Locale.getDefault());
+		list.clear();
+		collections.clear();
+		if (charText.length() == 0) {
+			list.addAll(originalList);
+			collections.putAll(originalCollections);
+		} else {
+			for (Item item : originalList) {
+				ArrayList<Brand> brand = originalCollections.get(item);
+				ArrayList<Brand> array = new ArrayList<Brand>();
+
+				for (Brand b : brand) {
+					if (b.getName().toLowerCase(Locale.getDefault()).contains(charText)) {
+						array.add(b);
+					}
+				}
+
+				if (!array.isEmpty() || item.getName().toLowerCase(Locale.getDefault()).contains(charText)) {
+					collections.put(item, array);
+					list.add(item);
+				}
+			}
+		}
+
+		notifyDataSetChanged();
+	}
+}

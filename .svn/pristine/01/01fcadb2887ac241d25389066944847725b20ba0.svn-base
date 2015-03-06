@@ -1,0 +1,173 @@
+package com.example.mygroceries;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Locale;
+import java.util.Map;
+
+import android.app.Activity;
+import android.app.Service;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.MenuItem.OnActionExpandListener;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.ExpandableListView.OnGroupExpandListener;
+import android.widget.RadioButton;
+import android.widget.Spinner;
+import android.widget.TextView;
+
+import com.example.mygroceries.adapter.BuyedListAdapter;
+import com.example.mygroceries.database.Brand;
+import com.example.mygroceries.database.DBBrand;
+import com.example.mygroceries.database.DBBuyedList;
+import com.example.mygroceries.database.DBItem;
+import com.example.mygroceries.database.Item;
+import com.example.mygroceries.zxing.IntentIntegrator;
+
+public class BuyedListFragment extends Fragment {
+
+	private ArrayList<Item> parentList;
+	private ArrayList<Brand> childList;
+	private Map<Item, ArrayList<Brand>> collections;
+	private ExpandableListView expandableListView;
+	private int lastExpandedPosition = -1;
+	private BuyedListAdapter adapter;
+	private View rootView;
+	private EditText itemName;
+	private RadioButton radioButtonQuantity;
+	private RadioButton radioButtonNeed;
+	private Spinner spinnerCategory;
+	private Spinner spinnerStorageArea;
+	private CheckBox checkBoxEssential;
+	private TextView textMinimum;
+	private EditText editMinimum;
+	private EditText editSearch;
+	private LayoutInflater layoutInflater;
+	private Activity activity;
+
+	@Override
+	public View onCreateView(LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstanceState) {
+		activity = this.getActivity();
+		this.layoutInflater = layoutInflater;
+		rootView = layoutInflater.inflate(R.layout.fragment_buyed, container, false);
+		setHasOptionsMenu(true);
+
+		return rootView;
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+			//inflater.inflate(R.menu.shopping_list_menu, menu);
+	}
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+
+		createParentList();
+
+		createChildList();
+
+		adapter = new BuyedListAdapter(rootView.getContext(), this.getActivity(), parentList, collections);
+
+		expandableListView = (ExpandableListView) this.getView().findViewById(R.id.buyed_list);
+
+		expandableListView.setAdapter(adapter);
+
+		expandableListView.setOnGroupExpandListener(new OnGroupExpandListener() {
+
+			public void onGroupExpand(int groupPosition) {
+				if (lastExpandedPosition != -1 && groupPosition != lastExpandedPosition) {
+					expandableListView.collapseGroup(lastExpandedPosition);
+				}
+				lastExpandedPosition = groupPosition;
+			}
+		});
+
+		expandableListView.setOnChildClickListener(new OnChildClickListener() {
+
+			@Override
+			public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+				return true;
+			}
+		});
+
+		expandableListView.setIndicatorBounds(10, 30);
+	}
+
+	private void search(MenuItem item) {
+		editSearch = (EditText) item.getActionView();
+		editSearch.addTextChangedListener(textWatcher);
+
+		item.setOnActionExpandListener(new OnActionExpandListener() {
+
+			@Override
+			public boolean onMenuItemActionExpand(MenuItem item) {
+				editSearch.setText("");
+				editSearch.requestFocus();
+
+				InputMethodManager imm = (InputMethodManager) activity.getSystemService(Service.INPUT_METHOD_SERVICE);
+				imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+				return true;
+			}
+
+			@Override
+			public boolean onMenuItemActionCollapse(MenuItem item) {
+				editSearch.clearFocus();
+
+				return true;
+			}
+		});
+	}
+
+	private void createParentList() {
+		DBBuyedList db = new DBBuyedList(rootView.getContext());
+
+		// Criar um metodo que vai fazer join com o buyedlist usar
+		// UNIQUE/DISTINCT
+		parentList = db.getAllItems();
+	}
+
+	private void createChildList() {
+		collections = new LinkedHashMap<Item, ArrayList<Brand>>();
+
+		DBBrand db = new DBBrand(rootView.getContext());
+
+		for (Item item : parentList) {
+
+			childList = db.getBrandWithItemId(item.getId());
+
+			collections.put(item, childList);
+		}
+	}
+
+	private TextWatcher textWatcher = new TextWatcher() {
+
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before, int count) {
+			String text = editSearch.getText().toString().toLowerCase(Locale.getDefault());
+
+			adapter.filter(text);
+		}
+
+		@Override
+		public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+		}
+
+		@Override
+		public void afterTextChanged(Editable s) {
+		}
+	};
+}

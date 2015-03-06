@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- General -->
+    <string name="yes">Sim</string>
+    <string name="no">Não</string>
+
+    <!-- Menu -->
+    <string name="app_name">My Groceries</string>
+    <string name="action_settings">Settings</string>
+    <string name="codebar_reader_text">Ler Código de Barras</string>
+    <string name="shopping_list_text">Lista de Compras</string>
+    <string name="manage_stock_text">Gerir Stock</string>
+    <string name="help_text">Ajuda</string>
+    <string name="search_hint">Procurar</string>
+
+    <!-- Buttons -->
+    <string name="button_add">+</string>
+    <string name="button_del">-</string>
+    <string name="button_search">Search</string>
+    <string name="button_codebar">Codebar</string>
+
+    <!-- Alert Dialog -->
+    <string name="alert_dialog_hint">Nome</string>
+    <string name="alert_dialog_cancel">Cancelar</string>
+    <string name="alert_dialog_ok">OK</string>
+
+    <!-- Add Edit Item Alert Dialog -->
+    <string name="alert_dialog_add_item_title">Adicione um Item</string>
+    <string name="alert_dialog_add_item_toast">Item adicionado com sucesso</string>
+    <string name="alert_dialog_edit_item_title">Editar Item</string>
+    <string name="alert_dialog_edit_item_toast">Item alterado com sucesso</string>
+    <string name="alert_dialog_delete_item_title">Eliminar Item</string>
+    <string name="alert_dialog_delete_item">Tem a certeza que deseja eliminar o item </string>
+    <string name="alert_dialog_type_title">Tipo</string>
+    <string name="alert_dialog_type_quantity">Quantidade</string>
+    <string name="alert_dialog_type_need">Necessidade</string>
+    <string name="alert_dialog_essential">Essencial</string>
+    <string name="alert_dialog_minimum_title">Quantidade Mínima:</string>
+    <string name="alert_dialog_minimum_hint">0</string>
+    <string name="alert_dialog_item_category">Categoria</string>
+    <string name="alert_dialog_item_storage_area">Secção</string>
+
+    <!-- Add Edit Category Alert Dialog -->
+    <string name="alert_dialog_add_category">Adicione uma Categoria</string>
+    <string name="alert_dialog_add_category_toast">Categoria adicionada com sucesso</string>
+    <string name="alert_dialog_edit_category_title">Editar Categoria</string>
+    <string name="alert_dialog_edit_category_toast">Categoria alterada com sucesso</string>
+    <string name="alert_dialog_delete_category_title">Eliminar Categoria</string>
+    <string name="alert_dialog_delete_category">Tem a certeza que deseja eliminar a categoria</string>
+
+    <!-- Add Edit Storage Area Alert Dialog -->
+    <string name="alert_dialog_add_storage_area">Adicione uma Secção</string>
+    <string name="alert_dialog_add_storage_area_toast">Secção adicionada com sucesso</string>
+    <string name="alert_dialog_edit_storage_area_title">Editar Secção</string>
+    <string name="alert_dialog_edit_storage_area_toast">Secção alterada com sucesso</string>
+    <string name="alert_dialog_delete_storage_area_title">Eliminar Secção</string>
+    <string name="alert_dialog_delete_storage_area">Tem a certeza que deseja eliminar a secção</string>
+
+    <!-- Add Brand -->
+    <string name="alert_dialog_delete_brand_title">Eliminar Item</string>
+    <string name="alert_dialog_delete_brand">Tem a certeza que deseja eliminar a marca </string>
+    <string name="add_brand_title">Adicione uma Marca</string>
+    <string name="add_brand_hint">Nome</string>
+    <string name="add_brand_plus">+</string>
+    <string name="add_brand_minus">-</string>
+    <string name="add_brand_zero">0</string>
+    <string name="add_brand_needed">Não tenho</string>
+    <string name="add_brand_notNeeded">Tenho</string>
+    <string name="add_brand_price">Preço</string>
+    <string name="add_brand_scan">Scan</string>
+    <string name="add_brand_description">Descrição</string>
+    <string name="add_brand_barcode_title">Código de Barras</string>
+    <string name="add_brand_favourite">Favorito</string>
+    <string name="add_brand_save_button">Guardar</string>
+	
+    <!-- Shopping List  -->
+    <string name="shopping_list_name">Lista de Compras</string>
+    <string name="shopping_list_start">Começar</string>
+    <string name="shopping_list_finish">Finalizar</string>
+    
+    <!-- Dialog Quantity Brand -->
+    <string name="alert_dialog_quantity_brand_add">Adicionar</string>
+    <string name="alert_dialog_quantity_brand_del">Remover</string>
+    <string name="alert_dialog_add_sucess">Adicionado com sucesso</string>
+    <string name="alert_dialog_del_sucess">Removido com sucesso</string>
+    <string name="alert_dialog_quantity">Quantidade</string>
+
+    <!-- Error Brand -->
+    <string name="error_brand_barcode">Já existe um codigo de barras com o número </string>
+    <string name="error_brand_price_neg">O preço não pode ser negativo</string>
+    <string name="error_brand_quantity_neg">A quantidade não pode ser negativa</string>
+
+    <!-- Titles -->
+    <string name="title_toBuy_list">Falta comprar</string>
+    <string name="title_buyed_list">Comprados</string>
+    <string name="title_fragment_item">Itens</string>
+    <string name="title_fragment_category">Categorias</string>
+    <string name="title_fragment_storage_area">Secções</string>
+    <string name="title_activity_item_edit">Detalhes do Item</string>
+    <string name="title_quantity_brand">Adicionar/Remover Marca</string>
+    <string name="title_select_item">Seleccione um Item</string>
+
+    <!-- BarCode Scanner -->
+    <string name="title_install_barcode">Instalar Barcode Scanner</string>
+    <string name="message_install_barcode">A aplicação requer Barcode Scanner. Deseja instalá-lo?</string>
+	<string name="message_cant_add">Não pode adicionar um produto que já tem (Necessidade)</string>
+	<string name="message_cant_del">Não pode remover um produto que não tem (Necessidade)</string>
+    
+    <!-- Errors -->
+    <string name="error_edit">Não é possível deixar o nome vazio</string>
+    <string name="error_items_dependency_category">Não é possível continuar porque esta categoria não está vazia</string>
+    <string name="error_items_dependency_storage_area">Não é possível continuar porque esta secção não está vazia</string>
+    <string name="error_brands_dependency_items">Não é possível continuar porque este item não está vazio</string>
+    <string name="error_scan">Erro ao ler o código de barras</string>
+    <string name="error_del_quantity_brand">Não é possivel remover</string>
+    <string name="alert_dialog_error_item_empty">O Campo item é de preenchimento obrigatório</string>
+    <string name="title_activity_shopping_list">ShoppingListActivity</string>
+    <string name="hello_world">Hello world!</string>
+
+</resources>

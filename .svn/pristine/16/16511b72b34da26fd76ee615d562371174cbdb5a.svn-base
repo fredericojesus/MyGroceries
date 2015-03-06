@@ -1,0 +1,150 @@
+package com.example.mygroceries.adapter;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Locale;
+
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.mygroceries.R;
+import com.example.mygroceries.database.Category;
+import com.example.mygroceries.database.DBCategory;
+
+public class CategoryAdapter extends BaseAdapter {
+	private LayoutInflater inflater;
+	private ArrayList<Category> list;
+	private ArrayList<Category> originalList;
+	private Context context;
+	
+	public CategoryAdapter(Context context, ArrayList<Category> list) {
+		this.context = context;
+		this.list = list;
+		this.originalList = new ArrayList<Category>();
+		this.originalList.addAll(list);
+		
+		inflater = LayoutInflater.from(context);
+	}
+	
+	@Override
+	public int getCount() {
+		return list.size();
+	}
+
+	@Override
+	public Object getItem(int position) {
+		return list.get(position);
+	}
+
+	@Override
+	public long getItemId(int position) {
+		return position;
+	}
+
+	@Override
+	public View getView(final int position, View view, ViewGroup parent) {
+		ViewHolder holder;
+
+		if (view == null || view.getTag() == null) {
+			holder = new ViewHolder();
+			view = inflater.inflate(R.layout.category_storage_row, null);
+			
+			holder.id = (TextView) view.findViewById(R.id.categoryStorageID);
+			holder.text = (TextView) view.findViewById(R.id.categoryStorageText);
+			holder.deleteImage = (ImageView) view.findViewById(R.id.delete_image);
+			
+			view.setTag(holder);
+		} else {
+			holder = (ViewHolder) view.getTag();
+		}
+
+		holder.text.setText(list.get(position).getName());
+		holder.id.setText(String.valueOf(list.get(position).getId()));
+		holder.deleteImage.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				final DBCategory db = new DBCategory(context);
+
+				if(db.dependency(list.get(position).getId())) {
+					
+					new AlertDialog.Builder(context)
+					.setTitle(R.string.alert_dialog_delete_category_title)
+					.setMessage(context.getString(R.string.alert_dialog_delete_category) + " " + list.get(position).getName() + "?")
+					.setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							
+						}
+					})
+					.setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							db.delete(list.get(position).getId());
+							list.remove(position);
+							
+							notifyDataSetChanged();
+						}
+					}).show();
+				}
+				else {
+					Toast toast = Toast.makeText(context, R.string.items_dependency_category, Toast.LENGTH_SHORT);
+					toast.show();
+				}
+			}
+		});
+		
+		return view;
+	}
+
+	public void filter(String charText) {
+		charText = charText.toLowerCase(Locale.getDefault());
+		list.clear();
+		if (charText.length() == 0) {
+			list.addAll(originalList);
+		} else {
+			for (Category category : originalList) {
+				if (category.getName().toLowerCase(Locale.getDefault())
+						.contains(charText)) {
+					list.add(category);
+				}
+			}
+		}
+
+		notifyDataSetChanged();
+	}
+	
+	public class ViewHolder {
+		TextView id;
+		TextView text;
+		ImageView deleteImage;
+	}
+	
+	public void addRow(Category category) {
+		list.add(category);
+		originalList.add(category);
+		
+		sortList();
+	}
+	
+	private void sortList() {
+		Collections.sort(list, new Comparator<Category>() {
+			@Override
+			public int compare(Category c1, Category c2) {
+	            return c1.getName().compareTo(c2.getName());
+	        }
+
+		});
+	}
+}

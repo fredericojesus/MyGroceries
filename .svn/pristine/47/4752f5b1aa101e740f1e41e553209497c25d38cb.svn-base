@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:layout_width="fill_parent" 
+            android:layout_height="fill_parent" 
+            xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<RadioGroup 
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content" 
+	    android:scrollbars="vertical"
+	    android:scrollbarAlwaysDrawVerticalTrack="true">
+	    
+	    <TextView
+	        android:id="@+id/currentQuantity"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="@dimen/padding_10dp"
+	        android:layout_marginTop="@dimen/padding_10dp"
+	        android:textSize="20sp" />
+    
+	    <RadioButton
+	        android:id="@+id/radio_add"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:checked="true"
+	        android:text="@string/alert_dialog_quantity_brand_add">
+	    </RadioButton>
+	    
+	    <RadioButton 
+	        android:id="@+id/radio_del"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:text="@string/alert_dialog_quantity_brand_del">
+	    </RadioButton>
+		
+	
+		<EditText
+	        android:id="@+id/newQuantity"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="@dimen/padding_5dp"
+	        android:ems="10"
+	        android:hint="@string/alert_dialog_quantity">
+	    </EditText>
+    </RadioGroup>
+</ScrollView>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:id="@+id/ScrollView01" 
+            android:layout_width="fill_parent" 
+            android:layout_height="fill_parent" 
+            xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<RadioGroup 
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content" 
+	    android:scrollbars="vertical"
+	    android:scrollbarAlwaysDrawVerticalTrack="true">
+		
+	     <EditText 
+	    	android:id="@+id/itemId"
+	    	android:layout_width="match_parent"
+	    	android:layout_height="match_parent" 
+	    	android:visibility="gone">
+	    </EditText>
+	    
+	    <EditText 
+	    	android:id="@+id/alert_dialog_item_text"
+	    	android:layout_width="match_parent"
+	    	android:layout_height="match_parent" 
+	    	android:hint="@string/alert_dialog_hint">
+	    </EditText>
+	    
+	    <TextView 
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:paddingLeft="@dimen/padding_10dp"
+	        android:paddingTop="@dimen/padding_5dp"
+	        android:textSize="15sp"
+	        android:text="@string/alert_dialog_type_title"/>
+	    
+	    <View
+	    	android:layout_width="fill_parent"
+	   		android:layout_height="1dp"
+	    	android:background="@android:color/holo_blue_light"/>
+	    
+	    <RadioButton
+	        android:id="@+id/radio_quantity"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:checked="true"
+	        android:text="@string/alert_dialog_type_quantity">
+	    </RadioButton>
+	    
+	    <RadioButton 
+	        android:id="@+id/radio_need"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:text="@string/alert_dialog_type_need">
+	    </RadioButton>
+	    
+	    <View
+	    	android:layout_width="fill_parent"
+	   		android:layout_height="1dp"
+	    	android:background="@android:color/holo_blue_light"/>
+	    
+	    <CheckBox
+	        android:id="@+id/checkEssential"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:text="@string/alert_dialog_essential">
+	    </CheckBox>
+	    
+	    <View
+	    	android:layout_width="fill_parent"
+	   		android:layout_height="1dp"
+	    	android:background="@android:color/holo_blue_light"/>
+	    
+	    <TextView 
+	        android:id="@+id/alert_dialog_item_mininum"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:paddingLeft="@dimen/padding_10dp"
+	        android:paddingTop="@dimen/padding_5dp"
+	        android:textSize="15sp"
+	        android:text="@string/alert_dialog_minimum_title"
+	        android:visibility="gone"/>
+	    
+	    <EditText 
+	    	android:id="@+id/alert_dialog_item_mininum_edit"
+	    	android:layout_width="match_parent"
+	    	android:layout_height="match_parent"
+	    	android:visibility="gone"
+	    	android:hint="@string/alert_dialog_minimum_hint" >
+	    </EditText>
+	    
+	    <View
+	    	android:layout_width="fill_parent"
+	   		android:layout_height="1dp"
+	    	android:background="@android:color/holo_blue_light"/>
+	    
+	    <TextView 
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:paddingLeft="@dimen/padding_10dp"
+	        android:paddingTop="@dimen/padding_5dp"
+	        android:textSize="15sp"
+	        android:text="@string/alert_dialog_item_category"/>
+	    
+	    <Spinner 
+	        android:id="@+id/category_spinner"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent">
+	    </Spinner>
+	    
+	    <TextView 
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:paddingLeft="@dimen/padding_10dp"
+	        android:paddingTop="@dimen/padding_5dp"
+	        android:textSize="15sp"
+	        android:text="@string/alert_dialog_item_storage_area"/>
+	    
+	    <Spinner 
+	        android:id="@+id/storage_area_spinner"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent">
+	    </Spinner>
+	    
+	</RadioGroup>
+</ScrollView>

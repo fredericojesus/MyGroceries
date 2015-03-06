@@ -1,0 +1,175 @@
+package com.example.mygroceries;
+
+import com.example.mygroceries.adapter.TabsPagerAdapter;
+
+import android.annotation.SuppressLint;
+import android.app.ActionBar;
+import android.app.ActionBar.Tab;
+import android.app.AlertDialog;
+import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.EditText;
+import android.widget.Toast;
+
+public class TabsActivity extends FragmentActivity implements ActionBar.TabListener {
+
+	private ViewPager viewPager;
+    private TabsPagerAdapter mAdapter;
+    private ActionBar actionBar;
+    
+    private EditText categoryName;
+    private EditText storageAreaName;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_tabs);	
+			
+		 // Initilization
+        viewPager = (ViewPager) findViewById(R.id.pager);
+        actionBar = getActionBar();
+        mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
+ 
+        viewPager.setAdapter(mAdapter);
+        actionBar.setHomeButtonEnabled(false);
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+        // Adding Tabs
+        actionBar.addTab(actionBar.newTab().setText(R.string.title_activity_item)
+        		.setTabListener(this));
+        actionBar.addTab(actionBar.newTab().setText(R.string.title_activity_category)
+                .setTabListener(this));
+        actionBar.addTab(actionBar.newTab().setText(R.string.title_activity_storage_area)
+                .setTabListener(this));
+ 
+        /**
+         * on swiping the viewpager make respective tab selected
+         * */
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+ 
+            @Override
+            public void onPageSelected(int position) {
+                // on changing the page
+                // make respected tab selected
+                actionBar.setSelectedNavigationItem(position);
+            }
+ 
+            @Override
+            public void onPageScrolled(int arg0, float arg1, int arg2) {
+            }
+ 
+            @Override
+            public void onPageScrollStateChanged(int arg0) {
+            }
+        });
+    }
+ 
+    @Override
+    public void onTabReselected(Tab tab, FragmentTransaction ft) {
+    }
+ 
+    @Override
+    public void onTabSelected(Tab tab, FragmentTransaction ft) {
+        // on tab selected
+        // show respected fragment view
+        viewPager.setCurrentItem(tab.getPosition());
+    }
+ 
+    @Override
+    public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+    	// Inflate the menu; this adds items to the action bar if it is present.
+    	getMenuInflater().inflate(R.menu.tabs, menu);
+    	
+    return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+        switch (item.getItemId()) {
+            case R.id.add_item:
+                
+                return true;
+            case R.id.add_category:
+            	addCategory();
+                return true;
+            case R.id.add_storage_area:
+            	addStorageArea();
+            	return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+    
+    private void addCategory() {
+    	LayoutInflater inflater = LayoutInflater.from(this);
+    	final View textEntryView = inflater.inflate(R.layout.alert_dialog_text_entry, null);
+    	categoryName = (EditText) textEntryView.findViewById(R.id.alert_dialog_text);
+    	
+    	
+    	new AlertDialog.Builder(this)
+    	.setTitle(R.string.alert_dialog_category)
+    	.setView(textEntryView)
+    	.setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+
+			}
+		})
+    	.setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				Context context = getApplicationContext();
+				if(categoryName.getText().toString().equals(""))
+					return;
+				Toast toast = Toast.makeText(context, "Categoria " + categoryName.getText().toString() + " adicionada.", Toast.LENGTH_SHORT);
+				toast.show();
+			}
+		}).show();
+    	
+    }
+    
+    private void addStorageArea() {
+    	LayoutInflater inflater = LayoutInflater.from(this);
+    	final View textEntryView = inflater.inflate(R.layout.alert_dialog_text_entry, null);
+    	storageAreaName = (EditText) textEntryView.findViewById(R.id.alert_dialog_text);
+    	
+    	new AlertDialog.Builder(this)
+    	.setTitle(R.string.alert_dialog_storage_area)
+    	.setView(storageAreaName)
+    	.setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				
+			}
+		})
+    	.setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				Context context = getApplicationContext();
+				if(storageAreaName.getText().toString().equals(""))
+					return;
+				Toast toast = Toast.makeText(context, "Secção " + storageAreaName.getText().toString() + " adicionada.", Toast.LENGTH_SHORT);
+				toast.show();
+			}
+		}).show();
+    	
+    }
+}

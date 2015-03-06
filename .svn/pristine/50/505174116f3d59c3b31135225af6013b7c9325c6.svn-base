@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="@dimen/padding_10dp" >
+    
+     <TextView
+        android:id="@+id/categoryStorageID"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/categoryStorageText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:paddingLeft="@dimen/padding_15dp"
+        android:textStyle="bold"
+        android:textColor="@color/text_list" />
+   	<!-- android:ellipsize="end"
+        android:singleLine="true" -->
+        
+    <ImageView
+        android:id="@+id/category_storage_edit"
+        android:layout_width="@dimen/row_icon_width"
+        android:layout_height="@dimen/row_icon_height"
+        android:scaleType="fitCenter"
+        android:paddingRight="@dimen/padding_5dp"
+        android:src="@drawable/ic_edit"
+        android:contentDescription="@string/app_name"/>
+    
+    <ImageView
+        android:id="@+id/category_storage_delete"
+        android:layout_width="@dimen/row_icon_width"
+        android:layout_height="@dimen/row_icon_height"
+        android:scaleType="fitCenter"
+        android:paddingRight="@dimen/padding_5dp"
+        android:src="@drawable/ic_delete"
+        android:contentDescription="@string/app_name"/>
+        
+    
+    
+
+</LinearLayout>

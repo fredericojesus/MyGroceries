@@ -1,0 +1,118 @@
+package com.example.mygroceries.database;
+
+import java.util.ArrayList;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
+public class DBItem extends DBManager<Item> {
+
+	public DBItem(Context context) {
+		super(context);
+	}
+
+	@Override
+	public long insert(Item item) {
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		ContentValues values = new ContentValues();
+
+		values.put(ITEM_NAME, item.getName());
+		values.put(ITEM_NEEDFUL, item.getNeedFul());
+		values.put(ITEM_BRAND_ID, item.getBrandId());
+		values.put(ITEM_CATEGORY_ID, item.getCategoryId());
+		values.put(ITEM_STORAGE_AREA_ID, item.getStorageAreaId());
+
+		long item_id = db.insert(TABLE_ITEM, null, values);
+
+		closeDB();
+
+		return item_id;
+	}
+
+	@Override
+	public void delete(long id) {
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		db.delete(TABLE_ITEM, ID + " = ?", new String[] { String.valueOf(id) });
+
+		closeDB();
+	}
+
+	@Override
+	public void update(Item item) {
+		SQLiteDatabase dataBase = this.getWritableDatabase();
+
+		ContentValues values = new ContentValues();
+
+		values.put(ITEM_NAME, item.getName());
+		values.put(ITEM_NEEDFUL, item.getNeedFul());
+		values.put(ITEM_BRAND_ID, item.getBrandId());
+		values.put(ITEM_CATEGORY_ID, item.getCategoryId());
+		values.put(ITEM_STORAGE_AREA_ID, item.getStorageAreaId());
+
+		dataBase.update(TABLE_ITEM, values, ID + " = ?",
+				new String[] { String.valueOf(item.getId()) });
+
+		closeDB();
+	}
+
+	@Override
+	public Item getSingle(long id) {
+		SQLiteDatabase db = this.getReadableDatabase();
+
+		String selectQuery = "SELECT  I.*, " + " FROM " + TABLE_ITEM + "I, "
+				+ TABLE_BRAND + " B, " + TABLE_CATEGORY + " C, "
+				+ TABLE_STORAGE_AREA + " SA, " + " WHERE I." + ID + " = " + id
+				+ " AND B." + ID + " = I." + ITEM_BRAND_ID + " AND C." + ID
+				+ " = I." + ITEM_CATEGORY_ID + " AND SA." + ID + " = I."
+				+ ITEM_STORAGE_AREA_ID;
+
+		Cursor c = db.rawQuery(selectQuery, null);
+
+		if (c != null) {
+			c.moveToFirst();
+		}
+
+		Item item = new Item();
+		item.setId(c.getLong(c.getColumnIndex(ID)));
+		item.setName(c.getString(c.getColumnIndex(ITEM_NAME)));
+		item.setBrandId(c.getLong(c.getColumnIndex(ITEM_BRAND_ID)));
+		item.setCategoryId(c.getLong(c.getColumnIndex(ITEM_CATEGORY_ID)));
+		item.setStorageAreaId(c.getLong(c.getColumnIndex(ITEM_STORAGE_AREA_ID)));
+
+		closeDB();
+
+		return item;
+	}
+
+	@Override
+	public ArrayList<Item> getAll() {
+		SQLiteDatabase db = this.getReadableDatabase();
+		ArrayList<Item> items = new ArrayList<Item>();
+
+		String selectQuery = "SELECT * FROM " + TABLE_ITEM;
+
+		Cursor c = db.rawQuery(selectQuery, null);
+
+		if (c.moveToFirst()) {
+			do {
+				Item item = new Item();
+				item.setId(c.getInt((c.getColumnIndex(ID))));
+				item.setName((c.getString(c.getColumnIndex(ITEM_NAME))));
+				item.setBrandId(c.getLong(c.getColumnIndex(ITEM_BRAND_ID)));
+				item.setCategoryId(c.getLong(c.getColumnIndex(ITEM_CATEGORY_ID)));
+				item.setStorageAreaId(c.getLong(c
+						.getColumnIndex(ITEM_STORAGE_AREA_ID)));
+
+				items.add(item);
+			} while (c.moveToNext());
+		}
+
+		closeDB();
+
+		return items;
+	}
+}

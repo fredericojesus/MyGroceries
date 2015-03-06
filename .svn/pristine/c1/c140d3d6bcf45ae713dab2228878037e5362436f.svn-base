@@ -1,0 +1,111 @@
+package com.example.mygroceries.database;
+
+import java.util.ArrayList;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
+public class DBShoppingList extends DBManager<ShoppingList> {
+
+	public DBShoppingList(Context context) {
+		super(context);
+	}
+
+	@Override
+	public long insert(ShoppingList shoppingList) {
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		ContentValues values = new ContentValues();
+
+		values.put(SHOPPING_LIST_BRAND_ID, shoppingList.getBrandId());
+		values.put(SHOPPING_LIST_ITEM_ID, shoppingList.getItemId());
+
+		long shoppingList_id = db.insert(TABLE_SHOPPING_LIST, null, values);
+
+		closeDB();
+
+		return shoppingList_id;
+	}
+
+	@Override
+	public void delete(long id) {
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		db.delete(TABLE_SHOPPING_LIST, ID + " = ?",
+				new String[] { String.valueOf(id) });
+
+		closeDB();
+	}
+
+	@Override
+	public void update(ShoppingList shoppingList) {
+		SQLiteDatabase dataBase = this.getWritableDatabase();
+
+		ContentValues values = new ContentValues();
+
+		values.put(SHOPPING_LIST_BRAND_ID, shoppingList.getBrandId());
+		values.put(SHOPPING_LIST_ITEM_ID, shoppingList.getItemId());
+
+		dataBase.update(TABLE_SHOPPING_LIST, values, ID + " = ?",
+				new String[] { String.valueOf(shoppingList.getId()) });
+
+		closeDB();
+	}
+
+	@Override
+	public ShoppingList getSingle(long id) {
+		SQLiteDatabase db = this.getReadableDatabase();
+
+		String selectQuery = "SELECT  L.*, " + " FROM " + TABLE_SHOPPING_LIST
+				+ " L, " + TABLE_BRAND + " B, " + TABLE_ITEM + " I, "
+				+ " WHERE I." + ID + " = " + id + " AND B." + ID + " = I."
+				+ SHOPPING_LIST_BRAND_ID + " AND C." + ID + " = I."
+				+ SHOPPING_LIST_ITEM_ID;
+
+		Cursor c = db.rawQuery(selectQuery, null);
+
+		if (c != null) {
+			c.moveToFirst();
+		}
+
+		ShoppingList shoppingList = new ShoppingList();
+		shoppingList.setId(c.getLong(c.getColumnIndex(ID)));
+		shoppingList.setBrandId(c.getLong(c
+				.getColumnIndex(SHOPPING_LIST_BRAND_ID)));
+		shoppingList.setItemId(c.getLong(c
+				.getColumnIndex(SHOPPING_LIST_ITEM_ID)));
+
+		closeDB();
+
+		return shoppingList;
+	}
+
+	@Override
+	public ArrayList<ShoppingList> getAll() {
+		SQLiteDatabase db = this.getReadableDatabase();
+		ArrayList<ShoppingList> shoppingLists = new ArrayList<ShoppingList>();
+
+		String selectQuery = "SELECT * FROM " + TABLE_SHOPPING_LIST;
+
+		Cursor c = db.rawQuery(selectQuery, null);
+
+		if (c.moveToFirst()) {
+			do {
+				ShoppingList shoppingList = new ShoppingList();
+				shoppingList.setId(c.getInt((c.getColumnIndex(ID))));
+				shoppingList.setBrandId(c.getLong(c
+						.getColumnIndex(SHOPPING_LIST_BRAND_ID)));
+				shoppingList.setItemId(c.getLong(c
+						.getColumnIndex(SHOPPING_LIST_ITEM_ID)));
+
+				shoppingLists.add(shoppingList);
+			} while (c.moveToNext());
+		}
+
+		closeDB();
+
+		return shoppingLists;
+	}
+}

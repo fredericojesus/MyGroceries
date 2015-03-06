@@ -1,0 +1,161 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="10dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="10dp"
+    tools:context=".BrandEditActivity" >
+
+    <EditText
+        android:id="@+id/brand_edit_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:ems="10"
+        android:hint="@string/add_brand_hint" />
+
+    <Button
+        android:id="@+id/brand_edit_plus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/brand_edit_name"
+        android:layout_below="@+id/brand_edit_name"
+        android:layout_marginLeft="25dp"
+        android:text="@string/add_brand_plus"
+        android:textSize="30sp"/>
+
+    <Button
+        android:id="@+id/brand_edit_minus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/button1"
+        android:layout_alignBottom="@+id/button1"
+        android:layout_toRightOf="@+id/button1"
+        android:text="@string/add_brand_minus"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/brand_edit_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/button2"
+        android:layout_alignBottom="@+id/button2"
+        android:layout_marginLeft="33dp"
+        android:layout_toRightOf="@+id/button2"
+        android:text="@string/add_brand_zero"
+        android:textSize="30sp" />
+
+    <View
+        android:id="@+id/view1"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_alignLeft="@+id/textView2"
+        android:layout_below="@+id/button1"
+        android:layout_marginTop="14dp"
+        android:background="@android:color/holo_blue_light" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editText1"
+        android:layout_below="@+id/view1"
+        android:layout_marginTop="22dp"
+        android:text="@string/add_brand_price"
+        android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/brand_edit_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView2"
+        android:layout_alignBottom="@+id/textView2"
+        android:layout_toRightOf="@+id/textView2"
+        android:ems="10"
+        android:inputType="numberDecimal" />
+
+    <View
+        android:id="@+id/View01"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_alignLeft="@+id/textView2"
+        android:layout_below="@+id/editText2"
+        android:layout_marginTop="19dp"
+        android:background="@android:color/holo_blue_light" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/View01"
+        android:layout_marginTop="22dp"
+        android:layout_toLeftOf="@+id/textView1"
+        android:text="@string/add_brand_barcode_title"
+        android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/brand_edit_barcode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/TextView01"
+        android:layout_alignRight="@+id/View01"
+        android:layout_below="@+id/TextView01"
+        android:ems="10"
+        android:inputType="number" />
+
+    <Button
+<<<<<<< .mine
+        android:id="@+id/brand_edit_scan"
+=======
+        android:id="@+id/btScan"
+>>>>>>> .r116
+        android:layout_width="70dp"
+        android:layout_height="30dp"
+        android:layout_alignBaseline="@+id/TextView01"
+        android:layout_alignBottom="@+id/TextView01"
+        android:layout_alignLeft="@+id/textView1"
+        android:text="@string/add_brand_scan"
+        android:textSize="12sp" />
+
+    <View
+        android:id="@+id/View02"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_alignLeft="@+id/editText3"
+        android:layout_below="@+id/editText3"
+        android:layout_marginTop="14dp"
+        android:background="@android:color/holo_blue_light" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/View02"
+        android:layout_below="@+id/View02"
+        android:layout_marginTop="19dp"
+        android:text="@string/add_brand_description"
+        android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/brand_edit_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/TextView02"
+        android:layout_alignRight="@+id/View02"
+        android:layout_below="@+id/TextView02"
+        android:ems="10"
+        android:inputType="textMultiLine" >
+
+        <requestFocus />
+    </EditText>
+
+    <CheckBox
+        android:id="@+id/checkBox1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editText4"
+        android:layout_below="@+id/editText4"
+        android:layout_marginTop="15dp"
+        android:text="Favorito" />
+
+</RelativeLayout>

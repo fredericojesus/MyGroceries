@@ -1,0 +1,38 @@
+package com.example.mygroceries.database;
+
+public class BuyedList {
+	private long id;
+	private long brandId;
+	private long itemId;
+
+	public BuyedList() {
+	};
+
+	public BuyedList(long id) {
+		this.id = id;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public long getBrandId() {
+		return brandId;
+	}
+
+	public void setBrandId(long brandId) {
+		this.brandId = brandId;
+	}
+
+	public long getItemId() {
+		return itemId;
+	}
+
+	public void setItemId(long itemId) {
+		this.itemId = itemId;
+	}
+}

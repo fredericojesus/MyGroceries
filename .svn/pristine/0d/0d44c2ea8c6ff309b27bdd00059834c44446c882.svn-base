@@ -1,0 +1,126 @@
+package com.example.mygroceries;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import com.example.mygroceries.database.Brand;
+import com.example.mygroceries.database.DBBrand;
+
+public class BrandEditActivity extends Activity {
+	private EditText brandName;
+	private EditText brandDescription;
+	private EditText brandBarCode;
+	private EditText brandPrice;
+	private TextView brandQuantity;
+	private CheckBox brandFavorite;
+	private Brand brand;
+	private long itemId = 0;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_brand_edit);
+
+		brand = (Brand) this.getIntent().getExtras().getSerializable("brand");
+		itemId = this.getIntent().getExtras().getLong("itemId");
+
+		init();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.brand_edit, menu);
+		return true;
+	}
+
+	private void init() {
+		brandName = (EditText) this.findViewById(R.id.editText1);
+		brandDescription = (EditText) this.findViewById(R.id.editText4);
+		brandBarCode = (EditText) this.findViewById(R.id.editText3);
+		brandPrice = (EditText) this.findViewById(R.id.editText2);
+		brandQuantity = (TextView) this.findViewById(R.id.textView1);
+		// brandFavorite = (CheckBox) this.findViewById(R.id.);
+		Button brandScan = (Button) this.findViewById(R.id.button3);
+		Button testButton = (Button) this.findViewById(R.id.button1);
+
+		if (brand != null) {
+			brandName.setText(brand.getName());
+			brandDescription.setText(brand.getDescription());
+			brandBarCode.setText(brand.getBarCode());
+			brandPrice.setText(String.valueOf(brand.getPrice()));
+			brandQuantity.setText(String.valueOf(brand.getQuantity()));
+
+			// if (brand.getFavourite() == 1){
+			// brandFavorite.setChecked(true);
+			// } else {
+			// brandFavorite.setChecked(false);
+			// }
+		}
+		
+		brandScan.setOnClickListener(new OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				
+			}
+		});
+		
+		testButton.setOnClickListener(new OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				if(brand == null){
+					insert();
+				} else {
+					update();
+				}
+			}
+		});
+	}
+	
+	private void insert(){
+		DBBrand db = new DBBrand(this);
+
+		populateBrand();
+	
+		db.insert(brand);
+	}
+	
+	private void update(){
+		DBBrand db = new DBBrand(this);
+		
+		populateBrand();
+		
+		db.update(brand);
+	}
+	
+	private void populateBrand(){
+		if(brand == null){
+			brand = new Brand();
+		}
+		
+		brand.setName(brandName.getText().toString());
+		brand.setDescription(brandName.getText().toString());
+		brand.setBarCode(brandBarCode.getText().toString());
+		brand.setPrice(Double.parseDouble(brandPrice.getText().toString()));
+		brand.setQuantity(Integer.parseInt(brandQuantity.getText().toString()));
+		
+		if(itemId != 0){
+			brand.setItemId(itemId);
+		}
+		
+		Log.d("TESTE", "itemId " + itemId + " brand " + brand.getName());
+//		if (brandFavorite.isChecked()){
+//			brand.setFavourite(1);
+//		} else {
+//			brand.setFavourite(0);
+//		}
+	}
+}

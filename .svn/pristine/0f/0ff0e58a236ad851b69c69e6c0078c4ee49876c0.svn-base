@@ -1,0 +1,225 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="10dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="10dp"
+    tools:context=".BrandEditActivity" >
+	
+    <TextView
+        android:id="@+id/item_name_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textStyle="bold"
+        android:textSize="20sp" />
+    
+     <View
+        android:id="@+id/view"
+        android:layout_width="fill_parent"
+        android:layout_height="3dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/item_name_textView"
+        android:layout_marginTop="@dimen/padding_5dp"
+        android:background="@android:color/holo_blue_light" />
+    
+    <EditText
+        android:id="@+id/brand_name_editText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/view"
+        android:layout_marginTop="@dimen/padding_5dp"
+        android:ems="10"
+        android:hint="@string/add_brand_hint">
+        <requestFocus />
+    </EditText>
+    
+    <Button
+        android:id="@+id/remove_brand_button"
+        android:layout_width="70dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/brand_name_editText"
+        android:text="@string/add_brand_minus" />
+    
+    <Button
+        android:id="@+id/add_brand_button"
+        android:layout_width="70dp"
+        android:layout_height="40dp"
+        android:layout_toRightOf="@+id/remove_brand_button"
+        android:layout_below="@+id/brand_name_editText"
+        android:text="@string/add_brand_plus" />
+	
+    <ImageButton 
+        android:id="@+id/need_button"
+        android:layout_width="70dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/brand_name_editText"
+        android:layout_marginLeft="@dimen/padding_25dp"
+        android:src="@drawable/wrong"
+        android:background="@null" 
+        android:contentDescription="@string/alert_dialog_type_need" />
+    
+    <ImageButton 
+        android:id="@+id/notNeed_button"
+        android:layout_width="70dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/brand_name_editText"
+        android:layout_marginLeft="@dimen/padding_25dp"
+        android:src="@drawable/right"
+        android:background="@null" 
+        android:contentDescription="@string/alert_dialog_type_need" />
+    
+    <TextView
+        android:id="@+id/brand_need_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/need_button"
+        android:layout_below="@+id/brand_name_editText"
+        android:layout_marginLeft="@dimen/padding_10dp"
+        android:text="@string/add_brand_notNeeded"
+        android:textSize="25sp" />
+    
+    <TextView
+        android:id="@+id/brand_quantity_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/add_brand_button"
+        android:layout_below="@+id/brand_name_editText"
+        android:layout_marginLeft="@dimen/padding_10dp"
+        android:text="@string/add_brand_zero"
+        android:textSize="30sp" />
+    
+    <View
+        android:id="@+id/view1"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/add_brand_button"
+        android:layout_marginTop="@dimen/padding_5dp"
+        android:background="@android:color/holo_blue_light" />
+    
+    <TextView
+        android:id="@+id/price_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/view1"
+        android:layout_marginTop="@dimen/padding_5dp"
+        android:text="@string/add_brand_price"
+        android:textSize="17sp" />
+    
+    <EditText
+        android:id="@+id/brand_price_editText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/price_textView"
+        android:ems="10"
+        android:inputType="numberDecimal" />
+    
+   <View
+        android:id="@+id/view2"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/brand_price_editText"
+        android:layout_marginTop="@dimen/padding_5dp"
+        android:background="@android:color/holo_blue_light" />
+
+   <TextView
+        android:id="@+id/codebar_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+       	android:layout_below="@+id/view2"
+       	android:layout_marginTop="@dimen/padding_5dp"
+        android:text="@string/add_brand_barcode_title"
+        android:textSize="17sp" />
+
+    <EditText
+        android:id="@+id/brand_codebar_editText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/codebar_textView"
+        android:ems="10"
+        android:inputType="number" />
+    
+    <ImageButton
+        android:id="@+id/btScan"
+        android:src="@drawable/ic_codebar"
+        android:contentDescription="@string/add_brand_scan"
+        android:layout_width="@dimen/size_48px"
+        android:layout_height="@dimen/size_48px"
+        android:layout_toRightOf="@+id/brand_codebar_editText"
+        android:layout_below="@+id/view2"
+        android:layout_marginTop="@dimen/padding_15dp"
+        android:layout_marginLeft="@dimen/padding_5dp"
+        android:text="@string/add_brand_scan"
+        android:textSize="12sp" />
+
+    <View
+        android:id="@+id/view3"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/brand_codebar_editText"
+        android:layout_marginTop="@dimen/padding_5dp"
+        android:background="@android:color/holo_blue_light" />
+
+    <TextView
+        android:id="@+id/description_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/view3"
+        android:layout_marginTop="@dimen/padding_5dp"
+        android:text="@string/add_brand_description"
+        android:textSize="17sp" />
+
+    <EditText
+        android:id="@+id/brand_description_editText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/description_textView"
+        android:ems="10"
+        android:inputType="textMultiLine" />
+
+    <View
+        android:id="@+id/view4"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/brand_description_editText"
+        android:layout_marginTop="@dimen/padding_5dp"
+        android:background="@android:color/holo_blue_light" />
+    
+    <CheckBox
+        android:id="@+id/brand_favourite_checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+     	android:layout_alignParentLeft="true"
+     	android:layout_below="@+id/view4"
+     	android:layout_marginTop="@dimen/padding_5dp"
+        android:text="@string/add_brand_favourite" />
+
+</RelativeLayout>
+</ScrollView>

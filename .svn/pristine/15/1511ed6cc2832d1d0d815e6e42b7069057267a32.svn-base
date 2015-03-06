@@ -1,0 +1,612 @@
+package com.example.mygroceries.adapter;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.mygroceries.BrandEditActivity;
+import com.example.mygroceries.R;
+import com.example.mygroceries.TabsActivity;
+import com.example.mygroceries.database.Brand;
+import com.example.mygroceries.database.Category;
+import com.example.mygroceries.database.DBBrand;
+import com.example.mygroceries.database.DBCategory;
+import com.example.mygroceries.database.DBItem;
+import com.example.mygroceries.database.DBStorageArea;
+import com.example.mygroceries.database.Item;
+import com.example.mygroceries.database.StorageArea;
+
+public class ItemAdapter extends BaseExpandableListAdapter {
+	private Activity activity;
+	private Map<Item, ArrayList<Brand>> collections;
+	private Map<Item, ArrayList<Brand>> originalCollections;
+	private List<Item> list;
+	private List<Item> originalList;
+	private TextView itemId;
+	private EditText itemName;
+	private RadioButton radioButtonQuantity;
+	private RadioButton radioButtonNeed;
+	private Spinner spinnerCategory;
+	private Spinner spinnerStorageArea;
+	private CheckBox checkBoxEssential;
+	private TextView textMinimum;
+	private EditText editMinimum;
+	private Context context;
+
+	public ItemAdapter(Context context, Activity activity, ArrayList<Item> list, Map<Item, ArrayList<Brand>> collections) {
+		this.context = context;
+		this.activity = activity;
+		this.collections = collections;
+		this.list = list;
+
+		originalList = new ArrayList<Item>();
+		originalList.addAll(list);
+
+		originalCollections = new HashMap<Item, ArrayList<Brand>>();
+		originalCollections.putAll(collections);
+	}
+
+	@Override
+	public Brand getChild(int groupPosition, int childPosition) {
+		return collections.get(list.get(groupPosition)).get(childPosition);
+	}
+
+	@Override
+	public long getChildId(int groupPosition, int childPosition) {
+		return childPosition;
+	}
+
+	@Override
+	public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View view,
+			ViewGroup parent) {
+		final Brand brand = getChild(groupPosition, childPosition);
+		final Item item = getGroup(groupPosition);
+
+		LayoutInflater inflater = activity.getLayoutInflater();
+
+		if (view == null) {
+			view = inflater.inflate(R.layout.child_item, null);
+		}
+
+		TextView brandName = (TextView) view.findViewById(R.id.brand_text);
+		brandName.setText(brand.getName());
+
+		final TextView brandSubText = (TextView) view.findViewById(R.id.brand_sub_text);
+		if (item.getType() == 0) {
+			brandSubText.setText("" + brand.getQuantity());
+		} else {
+			if (brand.getNeed() == 0) {
+				brandSubText.setText(R.string.add_brand_notNeeded);
+			} else {
+				brandSubText.setText(R.string.add_brand_needed);
+			}
+		}
+
+		ImageView deleteImage = (ImageView) view.findViewById(R.id.brand_delete);
+		deleteImage.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				deleteBrand(groupPosition, childPosition, brand, item);
+			}
+		});
+
+		ImageView editImage = (ImageView) view.findViewById(R.id.brand_edit);
+		editImage.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View view) {
+				updateBrand(brand, item);
+			}
+		});
+
+		final DBBrand dbBrand = new DBBrand(context);
+		final DBItem dbItem = new DBItem(context);
+		final ImageView rightRow = (ImageView) view.findViewById(R.id.brand_right);
+		final ImageView wrongRow = (ImageView) view.findViewById(R.id.brand_wrong);
+		rightRow.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (rightRow.getVisibility() == View.VISIBLE) {
+					rightRow.setVisibility(View.INVISIBLE);
+					wrongRow.setVisibility(View.VISIBLE);
+
+					brandSubText.setText(R.string.add_brand_needed);
+					brand.setNeed(1);
+					dbBrand.update(brand);
+
+					item.setType(dbBrand.checkBrandsNeed(item.getId()));
+					dbItem.update(item);
+
+					notifyDataSetChanged();
+				}
+			}
+		});
+		wrongRow.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (wrongRow.getVisibility() == View.VISIBLE) {
+					wrongRow.setVisibility(View.INVISIBLE);
+					rightRow.setVisibility(View.VISIBLE);
+
+					brandSubText.setText(R.string.add_brand_notNeeded);
+					brand.setNeed(0);
+					dbBrand.update(brand);
+
+					item.setType(dbBrand.checkBrandsNeed(item.getId()));
+					dbItem.update(item);
+
+					notifyDataSetChanged();
+				}
+			}
+		});
+
+		ImageView addRow = (ImageView) view.findViewById(R.id.brand_add);
+		addRow.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				brand.setQuantity(brand.getQuantity() + 1);
+				dbBrand.update(brand);
+
+				brandSubText.setText("" + brand.getQuantity());
+
+				item.setQuantity(item.getQuantity() + 1);
+				dbItem.update(item);
+
+				notifyDataSetChanged();
+			}
+		});
+
+		ImageView minusRow = (ImageView) view.findViewById(R.id.brand_minus);
+		minusRow.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (brand.getQuantity() > 0) {
+					brand.setQuantity(brand.getQuantity() - 1);
+					dbBrand.update(brand);
+
+					brandSubText.setText("" + brand.getQuantity());
+
+					item.setQuantity(item.getQuantity() - 1);
+					dbItem.update(item);
+
+					notifyDataSetChanged();
+				}
+			}
+		});
+
+		if (item.getType() == 0) {
+			addRow.setVisibility(View.VISIBLE);
+			minusRow.setVisibility(View.VISIBLE);
+			rightRow.setVisibility(View.INVISIBLE);
+			wrongRow.setVisibility(View.INVISIBLE);
+		} else {
+			addRow.setVisibility(View.INVISIBLE);
+			minusRow.setVisibility(View.INVISIBLE);
+			if (brand.getNeed() == 1) {
+				rightRow.setVisibility(View.INVISIBLE);
+				wrongRow.setVisibility(View.VISIBLE);
+			} else {
+				rightRow.setVisibility(View.VISIBLE);
+				wrongRow.setVisibility(View.INVISIBLE);
+			}
+		}
+
+		return view;
+	}
+
+	@Override
+	public int getChildrenCount(int groupPosition) {
+		if (collections != null && list != null && list.get(groupPosition) != null && collections.get(list.get(groupPosition)) != null) {
+			return collections.get(list.get(groupPosition)).size();
+		}
+
+		return 0;
+	}
+
+	@Override
+	public Item getGroup(int groupPosition) {
+		return list.get(groupPosition);
+	}
+
+	@Override
+	public int getGroupCount() {
+		return list.size();
+	}
+
+	@Override
+	public long getGroupId(int groupPosition) {
+		return groupPosition;
+	}
+
+	@Override
+	public View getGroupView(final int position, boolean isExpanded, View view, ViewGroup parent) {
+		final Item item = getGroup(position);
+
+		if (view == null) {
+			LayoutInflater infalInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			view = infalInflater.inflate(R.layout.parent_item, null);
+		}
+
+		TextView itemNameTV = (TextView) view.findViewById(R.id.itemText);
+		itemNameTV.setText(item.getName());
+
+		TextView itemQuantityNeedTV = (TextView) view.findViewById(R.id.quantity_need_Text);
+		if (item.getType() == 0)
+			itemQuantityNeedTV.setText("" + item.getQuantity());
+		else {
+			if (item.getType() == 1)
+				itemQuantityNeedTV.setText(R.string.add_brand_needed);
+			else
+				itemQuantityNeedTV.setText(R.string.add_brand_notNeeded);
+		}
+
+		ImageView deleteImage = (ImageView) view.findViewById(R.id.item_delete);
+		deleteImage.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				deleteItem(position);
+			}
+		});
+
+		ImageView editImage = (ImageView) view.findViewById(R.id.item_edit);
+		editImage.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View view) {
+				editItem(position);
+			}
+		});
+
+		ImageView addImage = (ImageView) view.findViewById(R.id.item_add);
+		addImage.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				addBrand(item);
+			}
+		});
+
+		sortList();
+
+		return view;
+	}
+
+	@Override
+	public boolean hasStableIds() {
+		return true;
+	}
+
+	@Override
+	public boolean isChildSelectable(int groupPosition, int childPosition) {
+		return true;
+	}
+
+	public void addRow(Item item) {
+		list.add(item);
+		originalList.add(item);
+
+		collections.put(item, new ArrayList<Brand>());
+		originalCollections.put(item, new ArrayList<Brand>());
+
+		sortList();
+	}
+
+	private void sortList() {
+		Collections.sort(list, new Comparator<Item>() {
+			@Override
+			public int compare(Item i1, Item i2) {
+				return i1.getName().compareTo(i2.getName());
+			}
+		});
+	}
+
+	public void filter(String charText) {
+		charText = charText.toLowerCase(Locale.getDefault());
+		list.clear();
+		collections.clear();
+		if (charText.length() == 0) {
+			list.addAll(originalList);
+			collections.putAll(originalCollections);
+		} else {
+			for (Item item : originalList) {
+				ArrayList<Brand> brand = originalCollections.get(item);
+				ArrayList<Brand> array = new ArrayList<Brand>();
+
+				for (Brand b : brand) {
+					if (b.getName().toLowerCase(Locale.getDefault()).contains(charText)) {
+						array.add(b);
+					}
+				}
+
+				if (!array.isEmpty() || item.getName().toLowerCase(Locale.getDefault()).contains(charText)) {
+					collections.put(item, array);
+					list.add(item);
+				}
+			}
+		}
+
+		notifyDataSetChanged();
+	}
+
+	private void addBrand(Item item) {
+		Bundle bundle = new Bundle();
+		bundle.putSerializable("item", item);
+
+		activity.startActivity(new Intent(context, BrandEditActivity.class).putExtras(bundle));
+		activity.finish();
+	}
+
+	private void updateBrand(Brand brand, Item item) {
+		Bundle bundle = new Bundle();
+		bundle.putSerializable("brand", brand);
+		bundle.putSerializable("item", item);
+
+		activity.startActivity(new Intent(context, BrandEditActivity.class).putExtras(bundle));
+		activity.finish();
+	}
+
+	private void deleteBrand(final int groupPosition, final int childPosition, final Brand brand, final Item item) {
+
+		new AlertDialog.Builder(activity).setTitle(R.string.alert_dialog_delete_brand_title)
+				.setMessage(activity.getString(R.string.alert_dialog_delete_brand) + " " + brand.getName() + "?")
+				.setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+
+					}
+				}).setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						deleteChild(groupPosition, childPosition, brand, item);
+					}
+				}).show();
+
+	}
+
+	private void deleteChild(int groupPosition, int childPosition, Brand brand, Item item) {
+		DBBrand db = new DBBrand(activity);
+		DBItem dbItem = new DBItem(activity);
+
+		item.setQuantity(item.getQuantity() - brand.getQuantity());
+		dbItem.update(item);
+		db.delete(brand.getId());
+
+		ArrayList<Brand> child = collections.get(list.get(groupPosition));
+
+		child.remove(childPosition);
+
+		notifyDataSetChanged();
+	}
+
+	private void deleteItem(final int position) {
+		final DBItem db = new DBItem(activity);
+
+		if (db.dependency(list.get(position).getId())) {
+			new AlertDialog.Builder(activity)
+					.setTitle(R.string.alert_dialog_delete_item_title)
+					.setMessage(
+							activity.getString(R.string.alert_dialog_delete_item) + " " + list.get(position).getName()
+									+ "?")
+					.setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+
+						}
+					}).setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							db.delete(list.get(position).getId());
+							int originalPosition = originalList.indexOf(new Item(list.get(position).getId()));
+							list.remove(position);
+							originalList.remove(originalPosition);
+
+							notifyDataSetChanged();
+						}
+					}).show();
+		} else {
+			Toast toast = Toast.makeText(activity, R.string.error_brands_dependency_items, Toast.LENGTH_LONG);
+			toast.show();
+		}
+	}
+
+	private void editItem(final int position) {
+		final View alertView = activity.getLayoutInflater().inflate(R.layout.alert_dialog_add_item, null);
+		itemId = (TextView) alertView.findViewById(R.id.itemId);
+		itemName = (EditText) alertView.findViewById(R.id.alert_dialog_item_text);
+		textMinimum = (TextView) alertView.findViewById(R.id.alert_dialog_item_mininum);
+		editMinimum = (EditText) alertView.findViewById(R.id.alert_dialog_item_mininum_edit);
+		radioButtonQuantity = (RadioButton) alertView.findViewById(R.id.radio_quantity);
+		radioButtonQuantity.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (checkBoxEssential.isChecked()) {
+					textMinimum.setVisibility(View.VISIBLE);
+					editMinimum.setVisibility(View.VISIBLE);
+				} else {
+					textMinimum.setVisibility(View.GONE);
+					editMinimum.setVisibility(View.GONE);
+				}
+			}
+		});
+		radioButtonNeed = (RadioButton) alertView.findViewById(R.id.radio_need);
+		radioButtonNeed.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				textMinimum.setVisibility(View.GONE);
+				editMinimum.setVisibility(View.GONE);
+			}
+		});
+		
+		if(list.get(position).getType() == 0 && list.get(position).getEssential() == 1) {
+			radioButtonQuantity.setChecked(true);
+			textMinimum.setVisibility(View.VISIBLE);
+			editMinimum.setVisibility(View.VISIBLE);
+		} else {
+			radioButtonNeed.setChecked(true);
+		}
+		
+		checkBoxEssential = (CheckBox) alertView.findViewById(R.id.checkEssential);
+		checkBoxEssential.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (checkBoxEssential.isChecked() && radioButtonQuantity.isChecked()) {
+					textMinimum.setVisibility(View.VISIBLE);
+					editMinimum.setVisibility(View.VISIBLE);
+				} else {
+					textMinimum.setVisibility(View.GONE);
+					editMinimum.setVisibility(View.GONE);
+				}
+			}
+		});
+		
+		spinnerCategory = (Spinner) alertView.findViewById(R.id.category_spinner);
+		spinnerStorageArea = (Spinner) alertView.findViewById(R.id.storage_area_spinner);
+
+		itemId.setText(String.valueOf(list.get(position).getId()));
+		itemName.setText(list.get(position).getName());
+
+		int essential = list.get(position).getEssential();
+
+		if (essential == 1) {
+			checkBoxEssential.setChecked(true);
+		}
+
+		editMinimum.setText(String.valueOf(list.get(position).getMinimum()));
+
+		populateSpinnerCategory(alertView.getContext());
+		populateSpinnerStorageArea(alertView.getContext());
+
+		spinnerCategory.setSelection(getPositionCategory(list.get(position).getCategoryId()));
+		spinnerStorageArea.setSelection(getPositionStorage(list.get(position).getStorageAreaId()));
+
+		AlertDialog alertDialog = new AlertDialog.Builder(activity).setTitle(R.string.alert_dialog_edit_item_title)
+				.setView(alertView)
+				.setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+
+					}
+				}).setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						if (itemName.getText().toString().equals("")) {
+							Toast toast = Toast.makeText(alertView.getContext(), R.string.error_edit,
+									Toast.LENGTH_SHORT);
+							toast.show();
+							return;
+						}
+
+						DBItem db = new DBItem(alertView.getContext());
+
+						Item item = new Item();
+
+						item.setId(Long.valueOf(itemId.getText().toString()));
+						item.setName(itemName.getText().toString());
+
+						if (radioButtonQuantity.isChecked()) {
+							item.setType(1);
+						} else {
+							item.setType(2);
+						}
+
+						if (checkBoxEssential.isChecked()) {
+							item.setEssential(1);
+							
+							if (editMinimum.getText().toString().isEmpty()) {
+								item.setMinimum(0);
+							} else {
+								item.setMinimum(Integer.parseInt(editMinimum.getText().toString()));
+							}
+						} else {
+							item.setEssential(0);
+						}
+
+						item.setCategoryId(spinnerCategory.getAdapter().getItemId(
+								spinnerCategory.getSelectedItemPosition()));
+						item.setStorageAreaId(spinnerStorageArea.getAdapter().getItemId(
+								spinnerStorageArea.getSelectedItemPosition()));
+
+						db.update(item);
+
+						int originalPosition = originalList.indexOf(new Item(list.get(position).getId()));
+						list.set(position, item);
+						originalList.set(originalPosition, item);
+
+						notifyDataSetChanged();
+
+						Toast toast = Toast.makeText(alertView.getContext(), R.string.alert_dialog_edit_item_toast,
+								Toast.LENGTH_SHORT);
+						toast.show();
+					}
+				}).create();
+		alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+		alertDialog.show();
+	}
+
+	private void populateSpinnerCategory(Context context) {
+		DBCategory db = new DBCategory(context);
+
+		ArrayList<Category> categories = db.getAll();
+
+		CategorySpinnerAdapter adapter = new CategorySpinnerAdapter(activity, categories);
+
+		spinnerCategory.setAdapter(adapter);
+	}
+
+	private void populateSpinnerStorageArea(Context context) {
+		DBStorageArea db = new DBStorageArea(context);
+
+		ArrayList<StorageArea> storageAreas = db.getAll();
+
+		StorageAreaSpinnerAdapter adapter = new StorageAreaSpinnerAdapter(activity, storageAreas);
+
+		spinnerStorageArea.setAdapter(adapter);
+	}
+
+	private int getPositionCategory(long categoryID) {
+		return ((CategorySpinnerAdapter) spinnerCategory.getAdapter()).getPosition(categoryID);
+	}
+
+	private int getPositionStorage(long storageID) {
+		return ((StorageAreaSpinnerAdapter) spinnerStorageArea.getAdapter()).getPosition(storageID);
+	}
+}

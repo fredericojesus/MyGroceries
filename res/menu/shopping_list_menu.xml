@@ -1,0 +1,25 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/action_settings"/>
+    
+    <item
+        android:id="@+id/search_menu_sl"
+        style="@style/ActionButtonStyle"
+        android:icon="@drawable/ic_search"
+        android:title="@string/button_search"
+        android:orderInCategory="0"
+        android:showAsAction="always|collapseActionView"    
+        android:actionLayout="@layout/search_layout"/>
+    
+    <item 
+        android:id="@+id/codebar_menu_sl" 
+        style="@style/ActionButtonStyle"
+        android:icon="@drawable/ic_codebar"
+        android:title="@string/button_codebar"
+        android:showAsAction="always"/>
+
+</menu>

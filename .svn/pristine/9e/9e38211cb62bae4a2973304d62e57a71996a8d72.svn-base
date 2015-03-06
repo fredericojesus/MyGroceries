@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Menu -->
+    <string name="app_name">My Groceries</string>
+    <string name="action_settings">Settings</string>
+    <string name="codebar_reader_text">Ler Código de Barras</string>
+    <string name="shopping_list_text">Lista de Compras</string>
+    <string name="manage_stock_text">Gerir Stock</string>
+    <string name="help_text">Ajuda</string>
+
+    <!-- Buttons -->
+    <string name="button_add">+</string>
+    <string name="button_del">-</string>
+    
+    <!-- Alert Dialog -->
+    <string name="alert_dialog_hint">Nome</string>
+    <string name="alert_dialog_cancel">Cancelar</string>
+    <string name="alert_dialog_ok">OK</string>
+    
+    <string name="alert_dialog_add_category">Adicione uma Categoria</string>
+    <string name="alert_dialog_add_category_toast">Categoria adicionada com sucesso.</string>
+    <string name="alert_dialog_add_storage_area">Adicione uma Secção</string>
+    <string name="alert_dialog_add_storage_area_toast">Secção adicionada com sucesso.</string>
+    
+    <string name="alert_dialog_edit_category_title">Editar Categoria</string>
+    <string name="alert_dialog_edit_category_toast">Categoria alterada com sucesso.</string>
+    <string name="alert_dialog_edit_storage_area_title">Editar Secção</string>
+    <string name="alert_dialog_edit_storage_area_toast">Secção alterada com sucesso.</string>
+    
+    <string name="alert_dialog_delete_category_title">Eliminar Categoria</string>
+    <string name="alert_dialog_delete_category">Tem a certeza que deseja eliminar a categoria</string>
+    <string name="alert_dialog_delete_storage_area_title">Eliminar Secção</string>
+    <string name="alert_dialog_delete_storage_area">Tem a certeza que deseja eliminar a secção</string>
+   
+    <!-- Titles -->
+    <string name="title_activity_item">Itens</string>
+    <string name="title_activity_category">Categorias</string>
+    <string name="title_activity_storage_area">Secções</string>
+    
+    <!-- Errors -->
+    <string name="error_edit">Não é possível deixar o nome vazio.</string>
+    <string name="error_items_dependency_category">Não é possível continuar porque esta categoria não está vazia.</string>
+    <string name="error_items_dependency_storage_area">Não é possível continuar porque esta secção não está vazia.</string>
+    <string name="error_brands_dependency_items">Não é possível continuar porque esta marca não está vazia.</string>
+
+</resources>

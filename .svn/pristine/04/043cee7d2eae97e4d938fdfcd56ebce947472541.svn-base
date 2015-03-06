@@ -1,0 +1,97 @@
+package com.example.mygroceries;
+
+import java.util.ArrayList;
+
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import com.example.mygroceries.adapter.StorageAreaAdapter;
+import com.example.mygroceries.database.DBStorageArea;
+import com.example.mygroceries.database.StorageArea;
+
+public class StorageAreasFragment extends Fragment {
+	private StorageAreaAdapter adapter;
+	private ListView storageAreaList;
+	private View rootView;
+	private EditText storageAreaName;
+	private DBStorageArea db;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		rootView = inflater.inflate(R.layout.fragment_storage_areas, container, false);
+		setHasOptionsMenu(true);
+
+		return rootView;
+	}
+	
+	@Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    	inflater.inflate(R.menu.add_menu, menu);
+    }
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+
+		storageAreaList = (ListView) rootView.findViewById(R.id.storage_area_list);
+
+		db = new DBStorageArea(rootView.getContext());
+
+		ArrayList<StorageArea> storageArea = db.getAll();
+
+		adapter = new StorageAreaAdapter(rootView.getContext(), storageArea);
+
+		storageAreaList.setAdapter(adapter);
+	}
+	
+	public boolean onOptionsItemSelected(MenuItem item) {
+		LayoutInflater inflater = LayoutInflater.from(this.getActivity());
+		final View textEntryView = inflater.inflate(R.layout.alert_dialog_cat_sto_text_entry, null);
+		storageAreaName = (EditText) textEntryView.findViewById(R.id.alert_dialog_cat_sto_editText);
+		
+		AlertDialog alertDialog = new AlertDialog.Builder(this.getActivity())
+		.setTitle(R.string.alert_dialog_add_storage_area)
+		.setView(storageAreaName)
+		.setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				
+			}
+		})
+		.setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				Context context = rootView.getContext();
+				if(storageAreaName.getText().toString().equals(""))
+					return;
+				Toast toast = Toast.makeText(context, R.string.alert_dialog_add_storage_area_toast, Toast.LENGTH_SHORT);
+				toast.show();
+				
+				StorageArea sto = new StorageArea(storageAreaName.getText().toString());
+				long id = db.insert(sto);
+				sto.setId(id);
+				adapter.addRow(sto);
+				adapter.notifyDataSetChanged();
+			}
+		}).show();
+		alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+    	alertDialog.show();
+		
+		return true;
+	}
+}

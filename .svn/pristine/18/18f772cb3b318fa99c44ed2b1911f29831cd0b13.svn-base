@@ -1,0 +1,143 @@
+package com.example.mygroceries;
+
+import java.util.ArrayList;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.RadioButton;
+import android.widget.Spinner;
+import android.widget.Toast;
+
+import com.example.mygroceries.adapter.ItemSpinnerAdapter;
+import com.example.mygroceries.database.DBBrand;
+import com.example.mygroceries.database.DBItem;
+import com.example.mygroceries.database.Item;
+
+public class ScanBarCode {
+	private Activity activity;
+	private RadioButton radioButtonAdd;
+	private RadioButton radioButtonDel;
+	private Spinner spinnerItem;
+	private Context context;
+
+	public ScanBarCode(Activity activity, Context context, String code) {
+		this.activity = activity;
+		this.context = context;
+		
+		if (existsCode(code)) {
+			quantityDialog(code);
+		} else {
+			addNewBrand(code);
+		}
+	}
+
+	private boolean existsCode(String code) {
+		DBBrand db = new DBBrand(activity.getBaseContext());
+
+		if (db.barCodeExists(-1, code)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private void quantityDialog(final String code) {
+		View alertView = activity.getLayoutInflater().inflate(R.layout.alert_dialog_add_brand, null);
+		radioButtonAdd = (RadioButton) alertView.findViewById(R.id.radio_add);
+		radioButtonDel = (RadioButton) alertView.findViewById(R.id.radio_del);
+
+		AlertDialog alertDialog = new AlertDialog.Builder(activity).setTitle(R.string.title_quantity_brand)
+				.setView(alertView)
+				.setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+
+					}
+				}).setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+//						Context context = context;
+
+						DBBrand db = new DBBrand(context);
+
+						if (radioButtonDel.isChecked()) {
+							boolean error = db.changeQuantity(code, 0);
+
+							if (!error) {
+								Toast toast = Toast.makeText(activity.getBaseContext(),
+										R.string.error_del_quantity_brand, Toast.LENGTH_SHORT);
+								toast.show();
+							} else {
+								Toast toast = Toast.makeText(activity.getBaseContext(),
+										R.string.alert_dialog_del_sucess, Toast.LENGTH_SHORT);
+								toast.show();
+
+							}
+						} else if (radioButtonAdd.isChecked()) {
+							db.changeQuantity(code, 1);
+
+							Toast toast = Toast.makeText(activity.getBaseContext(), R.string.alert_dialog_add_sucess,
+									Toast.LENGTH_SHORT);
+							toast.show();
+						}
+					}
+				}).create();
+		alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+		alertDialog.show();
+	}
+
+	private void addNewBrand(final String code) {
+		View alertView = activity.getLayoutInflater().inflate(R.layout.alert_dialog_new_brand, null);
+		spinnerItem = (Spinner) alertView.findViewById(R.id.item_spinner);
+
+		populateSpinnerItem();
+
+		AlertDialog alertDialog = new AlertDialog.Builder(activity).setTitle(R.string.title_select_item)
+				.setView(alertView)
+				.setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+
+					}
+				}).setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+
+						if (spinnerItem.getSelectedItemId() != 0) {
+							Bundle bundle = new Bundle();
+							bundle.putLong("itemId", spinnerItem.getSelectedItemId());
+							bundle.putString("codeBar", code);
+
+							activity.startActivity(new Intent(context, BrandEditActivity.class)
+									.putExtras(bundle));
+						} else {
+							Toast toast = Toast.makeText(activity.getBaseContext(),
+									R.string.alert_dialog_error_item_empty, Toast.LENGTH_SHORT);
+							toast.show();
+						}
+					}
+				}).create();
+		alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+		alertDialog.show();
+	}
+
+	private void populateSpinnerItem() {
+		DBItem db = new DBItem(context);
+
+		ArrayList<Item> item = db.getAll();
+
+		ItemSpinnerAdapter adapter = new ItemSpinnerAdapter(activity, item);
+
+		spinnerItem.setAdapter(adapter);
+	}
+}

@@ -1,0 +1,108 @@
+package com.example.mygroceries.adapter;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Typeface;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.TextView;
+
+import com.example.mygroceries.R;
+import com.example.mygroceries.database.Brand;
+import com.example.mygroceries.database.Item;
+
+public class ItemAdapter extends BaseExpandableListAdapter{
+	private Activity context;
+	private Map<Item, ArrayList<Brand>> collections;
+	private List<Item> list;
+	
+	public ItemAdapter(Activity context, ArrayList<Item> list,
+			Map<Item, ArrayList<Brand>> collections) {
+		this.context = context;
+		this.collections = collections;
+		this.list = list;
+	}
+
+	
+	@Override
+	public Brand getChild(int groupPosition, int childPosition) {
+		return collections.get(list.get(groupPosition)).get(
+				childPosition);
+	}
+
+	@Override
+	public long getChildId(int groupPosition, int childPosition) {
+		return childPosition;
+	}
+
+	@Override
+	public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+		Brand brand = getChild(groupPosition, childPosition);
+		
+		LayoutInflater inflater = context.getLayoutInflater();
+
+		if (convertView == null) {
+			convertView = inflater.inflate(R.layout.child_item, null);
+		}
+
+		TextView brandName = (TextView) convertView.findViewById(R.id.brand_text);
+		
+		brandName.setText(brand.getName());
+		
+		return convertView;
+	}
+
+	@Override
+	public int getChildrenCount(int groupPosition) {
+		return collections.get(list.get(groupPosition)).size();
+	}
+
+	@Override
+	public Item getGroup(int groupPosition) {
+		return list.get(groupPosition);
+	}
+
+	@Override
+	public int getGroupCount() {
+		return list.size();
+	}
+
+	@Override
+	public long getGroupId(int groupPosition) {
+		return groupPosition;
+	}
+
+	@Override
+	public View getGroupView(int groupPosition, boolean isExpanded,
+			View convertView, ViewGroup parent) {
+		Item item = getGroup(groupPosition);
+		
+		if (convertView == null) {
+			LayoutInflater infalInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			convertView = infalInflater.inflate(R.layout.parent_item, null);
+		}
+		
+		TextView itemName = (TextView) convertView.findViewById(R.id.itemText);
+		itemName.setTypeface(null, Typeface.BOLD);
+		itemName.setText(item.getName());
+		
+		return convertView;
+	}
+
+	@Override
+	public boolean hasStableIds() {
+		return true;
+	}
+
+	@Override
+	public boolean isChildSelectable(int groupPosition, int childPosition) {
+		return true;
+	}
+
+}

@@ -1,0 +1,175 @@
+package com.example.mygroceries.database;
+
+import java.util.ArrayList;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
+public class DBShoppingList extends DBManager<ShoppingList> {
+
+	public DBShoppingList(Context context) {
+		super(context);
+	}
+
+	@Override
+	public long insert(ShoppingList shoppingList) {
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		ContentValues values = new ContentValues();
+
+		values.put(SHOPPING_LIST_ITEM_ID, shoppingList.getItemId());
+
+		long shoppingList_id = db.insert(TABLE_SHOPPING_LIST, null, values);
+
+		closeDB();
+
+		return shoppingList_id;
+	}
+	
+	public void insertShoppingList(long id){
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		ContentValues values = new ContentValues();
+
+		values.put(SHOPPING_LIST_ITEM_ID, id);
+
+		db.insert(TABLE_SHOPPING_LIST, null, values);
+
+		closeDB();
+	}
+	
+	public void insertShoppingList(ArrayList<Item> shoppingList) {
+		for(int i = 0; i < shoppingList.size(); i++) {
+			insert(new ShoppingList(shoppingList.get(i).getId()));
+		}
+		
+		closeDB();
+	}
+
+	@Override
+	public void delete(long id) {
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		db.delete(TABLE_SHOPPING_LIST, ID + " = ?", new String[] { String.valueOf(id) });
+
+		closeDB();
+	}
+
+	public void deleteItem(long id) {
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		db.delete(TABLE_SHOPPING_LIST, SHOPPING_LIST_ITEM_ID + " = ?", new String[] { String.valueOf(id) });
+
+		closeDB();
+	}
+	
+	@Override
+	public void update(ShoppingList shoppingList) {
+		SQLiteDatabase dataBase = this.getWritableDatabase();
+
+		ContentValues values = new ContentValues();
+
+		values.put(SHOPPING_LIST_ITEM_ID, shoppingList.getItemId());
+
+		dataBase.update(TABLE_SHOPPING_LIST, values, ID + " = ?", new String[] { String.valueOf(shoppingList.getId()) });
+
+		closeDB();
+	}
+
+	@Override
+	public ArrayList<ShoppingList> getAll() {
+		SQLiteDatabase db = this.getReadableDatabase();
+		ArrayList<ShoppingList> shoppingLists = new ArrayList<ShoppingList>();
+
+		String selectQuery = "SELECT * FROM " + TABLE_SHOPPING_LIST;
+
+		Cursor c = db.rawQuery(selectQuery, null);
+
+		if (c.moveToFirst()) {
+			do {
+				ShoppingList shoppingList = new ShoppingList();
+				shoppingList.setId(c.getInt((c.getColumnIndex(ID))));
+				shoppingList.setItemId(c.getLong(c.getColumnIndex(SHOPPING_LIST_ITEM_ID)));
+
+				shoppingLists.add(shoppingList);
+			} while (c.moveToNext());
+		}
+
+		closeDB();
+
+		return shoppingLists;
+	}
+	
+	public ArrayList<Item> getAllItems() {
+		SQLiteDatabase db = this.getReadableDatabase();
+		ArrayList<Item> itemsToBuy = new ArrayList<Item>();
+
+		String selectQuery = "SELECT I.* FROM " + TABLE_ITEM + " I, " + TABLE_SHOPPING_LIST
+				+ " WHERE I." + ID + "=" + SHOPPING_LIST_ITEM_ID;
+
+		Cursor c = db.rawQuery(selectQuery, null);
+
+		if (c.moveToFirst()) {
+			do {
+				Item item = new Item();
+				item.setId(c.getLong(c.getColumnIndex(ID)));
+				item.setName(c.getString(c.getColumnIndex(ITEM_NAME)));
+				item.setType(c.getInt(c.getColumnIndex(ITEM_TYPE)));
+				item.setEssential(c.getInt(c.getColumnIndex(ITEM_ESSENTIAL)));
+				item.setMinimum(c.getInt(c.getColumnIndex(ITEM_MINIMUM)));
+				item.setQuantity(c.getInt(c.getColumnIndex(ITEM_QUANTITY)));
+				item.setCategoryId(c.getLong(c.getColumnIndex(ITEM_CATEGORY_ID)));
+				item.setStorageAreaId(c.getLong(c.getColumnIndex(ITEM_STORAGE_AREA_ID)));
+
+				itemsToBuy.add(item);
+			} while (c.moveToNext());
+		}
+
+		closeDB();
+
+		return itemsToBuy;
+	}
+	
+	public void deleteAll() {
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		db.delete(TABLE_SHOPPING_LIST, null, null);
+
+		closeDB();
+	}
+	
+	public boolean emptyShoppingList() {
+		SQLiteDatabase db = this.getReadableDatabase();
+
+		String selectQuery = "SELECT 1 FROM " + TABLE_SHOPPING_LIST;
+
+		Cursor c = db.rawQuery(selectQuery, null);
+
+		if (c.getCount() != 0) {
+			closeDB();
+			return false;
+		}
+		
+		closeDB();
+		return true;
+	}
+	
+	public boolean existsItem(long id) {
+		SQLiteDatabase db = this.getReadableDatabase();
+
+		String selectQuery = "SELECT 1 FROM " + TABLE_SHOPPING_LIST + " "
+				+ "WHERE " + SHOPPING_LIST_ITEM_ID + " = " + id;
+		
+		Cursor c = db.rawQuery(selectQuery, null);
+		
+		if (c.getCount() != 0) {
+			closeDB();
+			return true;
+		}
+		
+		closeDB();
+		return false;
+	}
+}

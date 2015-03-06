@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/padding_10dp" >
+ 
+    <TextView
+        android:id="@+id/brand_text_sl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+       	android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="@dimen/padding_15dp" />
+    
+  	<TextView
+        android:id="@+id/brand_sub_text_sl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/brand_text_sl"
+        android:layout_marginLeft="@dimen/padding_15dp" 
+        android:textSize="12sp" />
+    
+    <ImageView
+        android:id="@+id/brand_right_sl"
+        android:layout_width="@dimen/padding_25dp"
+        android:layout_height="@dimen/padding_25dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:scaleType="fitCenter"
+        android:layout_marginRight="@dimen/padding_10dp"
+        android:src="@drawable/right_row"
+        android:contentDescription="@string/app_name"/>
+    
+    <ImageView
+        android:id="@+id/brand_wrong_sl"
+        android:layout_width="@dimen/padding_25dp"
+        android:layout_height="@dimen/padding_25dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:scaleType="fitCenter"
+        android:layout_marginRight="@dimen/padding_10dp"
+        android:src="@drawable/wrong_row"
+        android:contentDescription="@string/app_name"/>
+    
+    <ImageView
+        android:id="@+id/brand_minus_sl"
+        android:layout_width="@dimen/row_icon_width"
+        android:layout_height="@dimen/row_icon_height"
+        android:layout_toLeftOf="@+id/brand_add_sl"
+        android:layout_centerVertical="true"
+        android:scaleType="fitCenter"
+        android:layout_marginRight="@dimen/padding_10dp"
+        android:src="@drawable/minus_row"
+        android:contentDescription="@string/app_name"/>
+    
+    <ImageView
+        android:id="@+id/brand_add_sl"
+        android:layout_width="@dimen/row_icon_width"
+        android:layout_height="@dimen/row_icon_height"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:scaleType="fitCenter"
+        android:layout_marginRight="@dimen/padding_10dp"
+        android:src="@drawable/add_row"
+        android:contentDescription="@string/app_name"/>
+ 
+</RelativeLayout>

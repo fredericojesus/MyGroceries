@@ -1,0 +1,61 @@
+package com.example.mygroceries.database;
+
+public class Item {
+	private long id;
+	private String name;
+	private int needFul;
+	private long categoryId;
+	private long storageAreaId;
+
+	public Item() {
+	};
+
+	public Item(String name) {
+		this.name = name;
+	}
+
+	public Item(long id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getNeedFul() {
+		return needFul;
+	}
+
+	public void setNeedFul(int needFul) {
+		this.needFul = needFul;
+	}
+
+	public long getCategoryId() {
+		return categoryId;
+	}
+
+	public void setCategoryId(long categoryId) {
+		this.categoryId = categoryId;
+	}
+
+	public long getStorageAreaId() {
+		return storageAreaId;
+	}
+
+	public void setStorageAreaId(long storageAreaId) {
+		this.storageAreaId = storageAreaId;
+	}
+}

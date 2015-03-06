@@ -1,0 +1,47 @@
+package com.example.mygroceries.adapter;
+
+import java.util.ArrayList;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+
+public abstract class  ListAdapter<T> extends BaseAdapter{
+	protected Context context;
+	protected LayoutInflater inflater;
+	protected ArrayList<T> list;
+	protected ArrayList<T> originalList;
+	
+	public ListAdapter(Context context){
+		this.context = context;
+		inflater = LayoutInflater.from(context);	
+	}
+	
+	@Override
+	public int getCount() {
+		return list.size();
+	}
+
+	@Override
+	public Object getItem(int position) {
+		return list.get(position);
+	}
+
+	@Override
+	public abstract long getItemId(int position);
+
+	@Override
+	public abstract View getView(final int position, View convertView, ViewGroup parent);
+	
+	protected abstract void deleteDialog(final int position);
+	
+	public abstract void insertUpdateDialog(final int position);
+	
+	public abstract void filter(String charText);
+	
+	protected abstract void addRow(T t);
+	
+	protected abstract void sortList();
+}

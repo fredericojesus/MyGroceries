@@ -1,0 +1,91 @@
+package com.example.mygroceries.database;
+
+public class Brand {
+	private long id;
+	private String name;
+	private String description;
+	private String barCode;
+	private double price;
+	private int quantity;
+	private int needFul;
+
+	public Brand() {
+	};
+
+	public Brand(String name, String description, String barCode, double price,
+			int quantity, int needFul) {
+		this.name = name;
+		this.description = description;
+		this.barCode = barCode;
+		this.price = price;
+		this.quantity = quantity;
+		this.needFul = needFul;
+	}
+
+	public Brand(long id, String name, String description, String barCode,
+			double price, int quantity, int needFul) {
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.barCode = barCode;
+		this.price = price;
+		this.quantity = quantity;
+		this.needFul = needFul;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getBarCode() {
+		return barCode;
+	}
+
+	public void setBarCode(String barCode) {
+		this.barCode = barCode;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
+	public int getNeedful() {
+		return needFul;
+	}
+
+	public void setNeedFul(int needFul) {
+		this.needFul = needFul;
+	}
+}

@@ -1,0 +1,241 @@
+package com.example.mygroceries.adapter;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Locale;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.mygroceries.ItemsFragment;
+import com.example.mygroceries.R;
+import com.example.mygroceries.TabsActivity;
+import com.example.mygroceries.database.Category;
+import com.example.mygroceries.database.DBCategory;
+
+public class CategoryAdapter extends ListAdapter<Category> {
+	private EditText categoryName;
+	private DBCategory db;
+	private Activity activity;
+
+	public CategoryAdapter(Context context, Activity activity) {
+		super(context);
+		this.activity = activity;
+
+		db = new DBCategory(context);
+
+		ArrayList<Category> categories = db.getAll();
+
+		list = categories;
+
+		originalList = new ArrayList<Category>();
+		originalList.addAll(categories);
+
+		sortList();
+	}
+	
+	@Override
+	public long getItemId(int position) {
+		return list.get(position).getId();
+	}
+	
+	@Override
+	public View getView(final int position, View view, ViewGroup parent) {
+		ViewHolder holder;
+
+		if (view == null || view.getTag() == null) {
+			holder = new ViewHolder();
+			view = inflater.inflate(R.layout.category_storage_row, null);
+
+			holder.id = (TextView) view.findViewById(R.id.categoryStorageID);
+			holder.text = (TextView) view.findViewById(R.id.categoryStorageText);
+			holder.deleteImage = (ImageView) view.findViewById(R.id.category_storage_delete);
+			holder.editImage = (ImageView) view.findViewById(R.id.category_storage_edit);
+
+			view.setTag(holder);
+		} else {
+			holder = (ViewHolder) view.getTag();
+		}
+		
+		holder.id.setText(String.valueOf(list.get(position).getId()));
+		holder.text.setText(list.get(position).getName());
+		holder.text.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
+				ItemsFragment.categoryID = list.get(position).getId();
+				TabsActivity.actionBar.setSelectedNavigationItem(0);
+			}
+		});
+		
+		holder.deleteImage.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
+				deleteDialog(position);
+			}
+		});
+
+		holder.editImage.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
+				insertUpdateDialog(position);
+			}
+		});
+
+		return view;
+	}
+
+	@Override
+	protected void deleteDialog(final int position) {
+		if (db.dependency(list.get(position).getId())) {
+
+			new AlertDialog.Builder(context)
+					.setTitle(R.string.alert_dialog_delete_category_title)
+					.setMessage(
+							context.getString(R.string.alert_dialog_delete_category) + " "
+									+ list.get(position).getName() + "?")
+					.setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+
+						}
+					}).setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							db.delete(list.get(position).getId());
+							int originalPosition = originalList.indexOf(new Category(list.get(position).getId()));
+							list.remove(position);
+							originalList.remove(originalPosition);
+
+							notifyDataSetChanged();
+						}
+					}).show();
+		} else {
+			Toast toast = Toast.makeText(context, R.string.error_items_dependency_category, Toast.LENGTH_LONG);
+			toast.show();
+		}
+	}
+
+	@Override
+	public void insertUpdateDialog(final int position) {
+		View textEntryView = inflater.inflate(R.layout.alert_dialog_cat_sto_text_entry, null);
+		categoryName = (EditText) textEntryView.findViewById(R.id.alert_dialog_cat_sto_editText);
+
+		String title;
+		if (position != -1) {
+			categoryName.setText(list.get(position).getName());
+			title = activity.getString(R.string.alert_dialog_edit_category_title);
+		} else {
+			title = activity.getString(R.string.alert_dialog_add_category);
+		}
+		
+
+		new AlertDialog.Builder(context).setTitle(title).setView(textEntryView)
+				.setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+
+					}
+				}).setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						if (position == -1) {
+							insert();
+						} else {
+							update(position);
+						}
+					}
+				}).show();
+	}
+
+	private void insert() {
+		if (categoryName.getText().toString().equals("")) {
+			return;
+		}
+
+		Category cat = new Category(categoryName.getText().toString());
+		long id = db.insert(cat);
+		cat.setId(id);
+		addRow(cat);
+		
+		Toast toast = Toast.makeText(context, R.string.alert_dialog_add_category_toast, Toast.LENGTH_SHORT);
+		toast.show();
+
+		notifyDataSetChanged();
+	}
+
+	private void update(int position) {
+		if (categoryName.getText().toString().isEmpty()) {
+			Toast toast = Toast.makeText(context, R.string.error_edit, Toast.LENGTH_SHORT);
+			toast.show();
+		} else if (!list.get(position).getName().equals(categoryName.getText().toString())) {
+
+			Category cat = new Category(list.get(position).getId(), categoryName.getText().toString());
+			db.update(cat);
+			int originalPosition = originalList.indexOf(new Category(list.get(position).getId()));
+			list.set(position, cat);
+			originalList.set(originalPosition, cat);
+			sortList();
+			notifyDataSetChanged();
+
+			Toast toast = Toast.makeText(context, R.string.alert_dialog_edit_category_toast, Toast.LENGTH_SHORT);
+			toast.show();
+		}
+	}
+
+	@Override
+	public void filter(String charText) {
+		charText = charText.toLowerCase(Locale.getDefault());
+		list.clear();
+
+		if (charText.length() == 0) {
+			list.addAll(originalList);
+		} else {
+			for (Category category : originalList) {
+				if (category.getName().toLowerCase(Locale.getDefault()).contains(charText)) {
+					list.add(category);
+				}
+			}
+		}
+
+		notifyDataSetChanged();
+	}
+
+	@Override
+	protected void addRow(Category category) {
+		list.add(category);
+		originalList.add(category);
+
+		sortList();
+	}
+
+	@Override
+	protected void sortList() {
+		Collections.sort(list, new Comparator<Category>() {
+			@Override
+			public int compare(Category c1, Category c2) {
+				return c1.getName().compareTo(c2.getName());
+			}
+		});
+	}
+
+	public class ViewHolder {
+		TextView id;
+		TextView text;
+		ImageView deleteImage;
+		ImageView editImage;
+	}
+}
